@@ -12,6 +12,20 @@ using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 /*
+CREATE TABLE dbo.Users
+(
+    UserID       INT IDENTITY(1,1) PRIMARY KEY,
+    Username     NVARCHAR(100) NOT NULL UNIQUE,
+    Password     NVARCHAR(100) NOT NULL UNIQUE,
+    UserRole     NVARCHAR(50)  NOT NULL,
+    CreatedAt    DATETIME2     NOT NULL DEFAULT SYSUTCDATETIME()
+);
+
+INSERT INTO dbo.Users (Username, Password, UserRole)
+VALUES 
+('admin', 'admin123', 'admin'),
+('staff', 'staff123', 'staff');
+
  * -- Customers
 CREATE TABLE Customers (
     customerID    INT IDENTITY(1,1) PRIMARY KEY,

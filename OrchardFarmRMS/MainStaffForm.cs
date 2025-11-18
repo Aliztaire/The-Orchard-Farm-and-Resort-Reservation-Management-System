@@ -66,8 +66,16 @@ namespace OrchardFarmRMS
 
             // wire a small set of runtime handlers that are not part of designer
             button6.Click += PaymentProofBrowse_Click;
-            if (textBox6 != null) textBox6.Leave += CurrencyTextBox_Leave;
-            if (textBox7 != null) textBox7.Leave += CurrencyTextBox_Leave;
+            if (textBox6 != null)
+            {
+                textBox6.Leave += CurrencyTextBox_Leave;
+                textBox6.KeyPress += CurrencyTextBox_KeyPress;
+            }
+            if (textBox7 != null)
+            {
+                textBox7.Leave += CurrencyTextBox_Leave;
+                textBox7.KeyPress += CurrencyTextBox_KeyPress;
+            }
 
             // small text updates kept here so designer remains pure layout
             if (label22 != null) label22.Text = "Total Due";
@@ -275,6 +283,10 @@ namespace OrchardFarmRMS
             checkOutDateBox.Value = DateTime.Now;
             noteBox.Clear();
 
+            // Clear customer fields as well when opening Add Reservation
+            if (NameBox != null) NameBox.Clear();
+            if (ContactBox != null) ContactBox.Clear();
+
             editingReservationId = null;
             confirmBtn.Text = "Add Reservation";
         }
@@ -302,6 +314,17 @@ namespace OrchardFarmRMS
                 return;
             }
 
+            // Require a package to be selected for new reservations
+            if (editingReservationId == null)
+            {
+                if (string.IsNullOrWhiteSpace(packageSelected) || packageBox?.SelectedIndex == -1)
+                {
+                    ShowWarning("Select a package before adding a reservation.");
+                    if (packageBox != null) packageBox.Focus();
+                    return;
+                }
+            }
+
             if (editingReservationId == null)
             {
                 // Add flow
@@ -320,8 +343,8 @@ namespace OrchardFarmRMS
                             packagePriceObj = drv["PackagePrice"] == DBNull.Value ? (object)DBNull.Value : drv["PackagePrice"];
 
                         const string insertPaymentSql = @"
-INSERT INTO Payment (ReservationID, PackagePrice, PaymentDate, TotalDue, ExtensionFee, AmountPaid, PaymentProof, PaymentStatus)
-VALUES (@reservationID, @packagePrice, SYSUTCDATETIME(), NULL, NULL, NULL, NULL, @paymentStatus);";
+    INSERT INTO Payment (ReservationID, PackagePrice, PaymentDate, TotalDue, ExtensionFee, AmountPaid, PaymentProof, PaymentStatus)
+    VALUES (@reservationID, @packagePrice, SYSUTCDATETIME(), NULL, NULL, NULL, NULL, @paymentStatus);";
 
                         using (var payCmd = new SqlCommand(insertPaymentSql, conn, tx))
                         {
@@ -336,6 +359,8 @@ VALUES (@reservationID, @packagePrice, SYSUTCDATETIME(), NULL, NULL, NULL, NULL,
                         ShowInfo("Reservation saved.");
                         LoadReservations();
                         LoadPayments();
+                        // Ensure customers grid is updated after adding a reservation (new customer may have been created)
+                        LoadCustomers();
                         ResClearBtn_Click(null, EventArgs.Empty);
                         tabControl1.SelectedIndex = 0;
                         ButtonSettings();
@@ -373,26 +398,26 @@ VALUES (@reservationID, @packagePrice, SYSUTCDATETIME(), NULL, NULL, NULL, NULL,
                     try
                     {
                         using (var updateCust = new SqlCommand(@"
-UPDATE Customers
-SET fullName = @name,
-    facebookLink = @link
-WHERE customerID = @cid;", conn, tx))
+    UPDATE Customers
+    SET fullName = @name,
+        facebookLink = @link
+    WHERE customerID = @cid;", conn, tx))
                         {
                             updateCust.Parameters.AddWithValue("@name", customerName);
-                            updateCust.Parameters.AddWithValue("@link", facebookLink);
+                            updateCust.Parameters.AddWithValue("@link", string.IsNullOrWhiteSpace(facebookLink) ? (object)DBNull.Value : facebookLink);
                             updateCust.Parameters.AddWithValue("@cid", customerID);
                             updateCust.ExecuteNonQuery();
                         }
 
                         using (var updateRes = new SqlCommand(@"
-UPDATE Reservation
-SET PackageName = @package,
-    NumGuests = @guests,
-    CheckInDate = @ci,
-    CheckOutDate = @co,
-    SpecialNote = @notes,
-    DateModified = SYSUTCDATETIME()
-WHERE ReservationID = @id;", conn, tx))
+    UPDATE Reservation
+    SET PackageName = @package,
+        NumGuests = @guests,
+        CheckInDate = @ci,
+        CheckOutDate = @co,
+        SpecialNote = @notes,
+        DateModified = SYSUTCDATETIME()
+    WHERE ReservationID = @id;", conn, tx))
                         {
                             updateRes.Parameters.AddWithValue("@package", packageSelected);
                             updateRes.Parameters.AddWithValue("@guests", guests);
@@ -408,6 +433,8 @@ WHERE ReservationID = @id;", conn, tx))
                         ShowInfo("Reservation updated.");
                         LoadReservations();
                         LoadPayments();
+                        // refresh customers grid because we updated the customer record above
+                        LoadCustomers();
                         editingReservationId = null;
                         ResClearBtn_Click(null, EventArgs.Empty);
                         tabControl1.SelectedIndex = 0;
@@ -462,18 +489,19 @@ WHERE ReservationID = @id;", conn, tx))
 
                 using var conn = CreateConnection();
                 using var cmd = new SqlCommand(@"
-SELECT R.PackageName, R.NumGuests, R.CheckInDate, R.CheckOutDate, R.SpecialNote,
-       C.fullName, C.facebookLink
-FROM Reservation R
-LEFT JOIN Customers C ON R.CustomerID = C.customerID
-WHERE R.ReservationID = @id;", conn);
+    SELECT R.PackageName, R.NumGuests, R.CheckInDate, R.CheckOutDate, R.SpecialNote,
+           C.fullName, C.facebookLink
+    FROM Reservation R
+    LEFT JOIN Customers C ON R.CustomerID = C.customerID
+    WHERE R.ReservationID = @id;", conn);
                 cmd.Parameters.AddWithValue("@id", id);
                 conn.Open();
                 using var rdr = cmd.ExecuteReader();
                 if (rdr.Read())
                 {
                     NameBox.Text = rdr["fullName"] != DBNull.Value ? rdr["fullName"].ToString() : string.Empty;
-                    ContactBox.Text = rdr["facebookLink"] != DBNull.Value ? rdr["facebooklink"].ToString() : string.Empty;
+                    // fixed column name usage (was mixing case "facebooklink")
+                    ContactBox.Text = rdr["facebookLink"] != DBNull.Value ? rdr["facebookLink"].ToString() : string.Empty;
 
                     var pkg = rdr["PackageName"] != DBNull.Value ? rdr["PackageName"].ToString() : string.Empty;
                     if (!string.IsNullOrEmpty(pkg) && packageBox?.Items != null)
@@ -590,10 +618,11 @@ WHERE R.ReservationID = @id;", conn);
                 if (editingCustomerId == null)
                 {
                     using var cmd = new SqlCommand(@"
-INSERT INTO Customers (fullName, facebookLink, CreatedAt)
-VALUES (@name, @link, SYSUTCDATETIME());", conn);
+    INSERT INTO Customers (fullName, facebookLink, CreatedAt)
+    VALUES (@name, @link, SYSUTCDATETIME());", conn);
                     cmd.Parameters.AddWithValue("@name", name);
-                    cmd.Parameters.AddWithValue("@link", link);
+                    var p = cmd.Parameters.Add("@link", SqlDbType.NVarChar, 500);
+                    p.Value = string.IsNullOrWhiteSpace(link) ? (object)DBNull.Value : link;
                     var rows = cmd.ExecuteNonQuery();
                     if (rows > 0)
                     {
@@ -612,11 +641,12 @@ VALUES (@name, @link, SYSUTCDATETIME());", conn);
                 else
                 {
                     using var cmd = new SqlCommand(@"
-UPDATE Customers
-SET fullName = @name, facebookLink = @link
-WHERE customerID = @id;", conn);
+    UPDATE Customers
+    SET fullName = @name, facebookLink = @link
+    WHERE customerID = @id;", conn);
                     cmd.Parameters.AddWithValue("@name", name);
-                    cmd.Parameters.AddWithValue("@link", link);
+                    var p = cmd.Parameters.Add("@link", SqlDbType.NVarChar, 500);
+                    p.Value = string.IsNullOrWhiteSpace(link) ? (object)DBNull.Value : link;
                     cmd.Parameters.AddWithValue("@id", editingCustomerId.Value);
                     var rows = cmd.ExecuteNonQuery();
                     if (rows > 0)
@@ -671,19 +701,19 @@ WHERE customerID = @id;", conn);
             {
                 using var conn = CreateConnection();
                 using var cmd = new SqlCommand(@"
-SELECT 
-    R.ReservationID, 
-    C.fullName AS CustomerName,
-    R.PackageName, 
-    R.PaymentStatus, 
-    R.NumGuests, 
-    R.CheckInDate, 
-    R.CheckOutDate, 
-    R.SpecialNote,
-    R.DateCreated
-FROM Reservation R
-JOIN Customers C ON R.CustomerID = C.customerID
-ORDER BY R.DateCreated DESC;", conn);
+    SELECT 
+        R.ReservationID, 
+        C.fullName AS CustomerName,
+        R.PackageName, 
+        R.PaymentStatus, 
+        R.NumGuests, 
+        R.CheckInDate, 
+        R.CheckOutDate, 
+        R.SpecialNote,
+        R.DateCreated
+    FROM Reservation R
+    JOIN Customers C ON R.CustomerID = C.customerID
+    ORDER BY R.DateCreated DESC;", conn);
 
                 reservationsTable = FillTable(cmd);
                 dataGridView1.DataSource = reservationsTable;
@@ -769,6 +799,15 @@ ORDER BY fullName;", conn);
                 }
 
                 ConfigureGrid(dataGridView2);
+
+                // Ensure UI updates immediately after refresh to avoid perceived delay
+                dataGridView2.Refresh();
+
+                // Only call BeginInvoke if the form's handle is created
+                if (this.IsHandleCreated)
+                {
+                    this.BeginInvoke((Action)(() => dataGridView2.Refresh()));
+                }
             }
             catch (Exception ex)
             {
@@ -785,18 +824,18 @@ ORDER BY fullName;", conn);
             {
                 using var conn = CreateConnection();
                 using var cmd = new SqlCommand(@"
-SELECT 
-    PaymentID, 
-    ReservationID, 
-    PackagePrice, 
-    PaymentDate, 
-    TotalDue, 
-    ExtensionFee, 
-    AmountPaid, 
-    PaymentProof, 
-    PaymentStatus
-FROM Payment
-ORDER BY PaymentDate DESC;", conn);
+    SELECT 
+        PaymentID, 
+        ReservationID, 
+        PackagePrice, 
+        PaymentDate, 
+        TotalDue, 
+        ExtensionFee, 
+        AmountPaid, 
+        PaymentProof, 
+        PaymentStatus
+    FROM Payment
+    ORDER BY PaymentDate DESC;", conn);
 
                 paymentsTable = FillTable(cmd);
                 dataGridView3.DataSource = paymentsTable;
@@ -828,25 +867,26 @@ ORDER BY PaymentDate DESC;", conn);
                 if (dataGridView3.Columns.Contains("PackagePrice"))
                 {
                     dataGridView3.Columns["PackagePrice"].HeaderText = "Package Price";
-                    dataGridView3.Columns["PackagePrice"].DefaultCellStyle.Format = "C2";
+                    // use "php" prefix instead of currency symbol
+                    dataGridView3.Columns["PackagePrice"].DefaultCellStyle.Format = "'php' #,##0.00";
                 }
 
                 if (dataGridView3.Columns.Contains("TotalDue"))
                 {
                     dataGridView3.Columns["TotalDue"].HeaderText = "Total Due";
-                    dataGridView3.Columns["TotalDue"].DefaultCellStyle.Format = "C2";
+                    dataGridView3.Columns["TotalDue"].DefaultCellStyle.Format = "'php' #,##0.00";
                 }
 
                 if (dataGridView3.Columns.Contains("ExtensionFee"))
                 {
                     dataGridView3.Columns["ExtensionFee"].HeaderText = "Extension Fee";
-                    dataGridView3.Columns["ExtensionFee"].DefaultCellStyle.Format = "C2";
+                    dataGridView3.Columns["ExtensionFee"].DefaultCellStyle.Format = "'php' #,##0.00";
                 }
 
                 if (dataGridView3.Columns.Contains("AmountPaid"))
                 {
                     dataGridView3.Columns["AmountPaid"].HeaderText = "Amount Paid";
-                    dataGridView3.Columns["AmountPaid"].DefaultCellStyle.Format = "C2";
+                    dataGridView3.Columns["AmountPaid"].DefaultCellStyle.Format = "'php' #,##0.00";
                 }
 
                 if (dataGridView3.Columns.Contains("PaymentDate"))
@@ -1021,9 +1061,9 @@ ORDER BY PaymentDate DESC;", conn);
             {
                 using var conn = CreateConnection();
                 using var cmd = new SqlCommand(@"
-SELECT PaymentID, ReservationID, AmountPaid, PaymentDate, PaymentProof, PaymentStatus, TotalDue, ExtensionFee
-FROM Payment
-WHERE PaymentID = @id;", conn);
+    SELECT PaymentID, ReservationID, AmountPaid, PaymentDate, PaymentProof, PaymentStatus, TotalDue, ExtensionFee
+    FROM Payment
+    WHERE PaymentID = @id;", conn);
                 cmd.Parameters.AddWithValue("@id", id);
                 conn.Open();
                 using var rdr = cmd.ExecuteReader();
@@ -1110,14 +1150,14 @@ WHERE PaymentID = @id;", conn);
                 try
                 {
                     using var cmd = new SqlCommand(@"
-UPDATE Payment
-SET AmountPaid = @amount,
-    PaymentDate = @pdate,
-    PaymentStatus = @status,
-    TotalDue = @totalDue,
-    ExtensionFee = @extFee,
-    PaymentProof = @proof
-WHERE PaymentID = @id;", conn, tx);
+    UPDATE Payment
+    SET AmountPaid = @amount,
+        PaymentDate = @pdate,
+        PaymentStatus = @status,
+        TotalDue = @totalDue,
+        ExtensionFee = @extFee,
+        PaymentProof = @proof
+    WHERE PaymentID = @id;", conn, tx);
 
                     var pAmount = cmd.Parameters.Add("@amount", System.Data.SqlDbType.Decimal);
                     pAmount.Precision = 18;
@@ -1204,10 +1244,10 @@ WHERE PaymentID = @id;", conn, tx);
             {
                 using var conn = CreateConnection();
                 using var cmd = new SqlCommand(@"
-SELECT PackageID, PackageName, PackagePrice, MaxGuests, Active, Details
-FROM Packages
-WHERE Active = 1
-ORDER BY PackageName;", conn);
+    SELECT PackageID, PackageName, PackagePrice, MaxGuests, Active, Details
+    FROM Packages
+    WHERE Active = 1
+    ORDER BY PackageName;", conn);
 
                 var dt = FillTable(cmd);
 
@@ -1215,7 +1255,12 @@ ORDER BY PackageName;", conn);
                 packageBox.ValueMember = "PackageID";
                 packageBox.DataSource = dt;
 
+                // make it selection-only
                 packageBox.SelectedIndex = -1;
+                packageBox.DropDownStyle = ComboBoxStyle.DropDownList;
+                packageBox.FlatStyle = FlatStyle.Flat;
+                packageBox.BackColor = Color.White;
+                packageBox.ForeColor = Color.FromArgb(33, 33, 33);
 
                 currentPackageMaxGuests = int.MaxValue;
                 guestBox.Maximum = 1000;
@@ -1425,23 +1470,58 @@ ORDER BY PackageName;", conn);
             }
         }
 
+        // Allow only numeric characters, decimal and thousand separators, control keys
+        private void CurrencyTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (char.IsControl(e.KeyChar)) return;
+
+            var decimalSep = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            var groupSep = CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator;
+
+            if (char.IsDigit(e.KeyChar) ||
+                e.KeyChar.ToString() == decimalSep ||
+                e.KeyChar.ToString() == groupSep)
+            {
+                // ok
+                return;
+            }
+
+            // otherwise block
+            e.Handled = true;
+        }
+
         private string FormatCurrencyString(decimal value)
         {
+            // Use "php" prefix with current-culture formatting for separators
             if (value == Math.Truncate(value))
-                return value.ToString("C0", CultureInfo.CurrentCulture);
-            return value.ToString("C2", CultureInfo.CurrentCulture);
+                return $"php {value.ToString("N0", CultureInfo.CurrentCulture)}";
+            return $"php {value.ToString("N2", CultureInfo.CurrentCulture)}";
         }
 
         private decimal ParseCurrencyString(string text)
         {
             if (string.IsNullOrWhiteSpace(text)) return 0m;
-            if (decimal.TryParse(text, NumberStyles.Currency, CultureInfo.CurrentCulture, out var v))
+
+            // remove "php" if present
+            var cleaned = text.Replace("php", "", StringComparison.OrdinalIgnoreCase).Trim();
+
+            // try parse with current culture (allows group separators)
+            if (decimal.TryParse(cleaned, NumberStyles.Number | NumberStyles.AllowCurrencySymbol, CultureInfo.CurrentCulture, out var v))
                 return v;
-            var cleaned = "";
-            foreach (var ch in text)
-                if (char.IsDigit(ch) || ch == '.' || ch == '-') cleaned += ch;
-            if (decimal.TryParse(cleaned, NumberStyles.Number, CultureInfo.InvariantCulture, out v))
+
+            // fallback: keep digits, decimal point and minus
+            var fallback = "";
+            foreach (var ch in cleaned)
+                if (char.IsDigit(ch) || ch == '.' || ch == '-' || ch == ',') fallback += ch;
+
+            // replace any group commas with current decimal separator handling if needed
+            if (decimal.TryParse(fallback, NumberStyles.Number, CultureInfo.InvariantCulture, out v))
                 return v;
+
+            // final attempt using current culture
+            if (decimal.TryParse(fallback, NumberStyles.Number, CultureInfo.CurrentCulture, out v))
+                return v;
+
             return 0m;
         }
 
@@ -1465,26 +1545,45 @@ ORDER BY PackageName;", conn);
 
         private int ExecuteNonQuery(SqlCommand cmd) => cmd.ExecuteNonQuery();
 
+        /// <summary>
+        /// Try to locate an existing customer by name OR facebook link (when link provided).
+        /// If not found, insert the customer. Null/empty links are stored as NULL.
+        /// </summary>
         private int FindOrCreateCustomer(SqlConnection conn, SqlTransaction tx, string fullName, string facebookLink)
         {
-            using (var checkCmd = new SqlCommand("SELECT customerID FROM Customers WHERE fullName = @name OR facebookLink = @link", conn, tx))
+            // First try to find by fullName (always)
+            using (var checkByName = new SqlCommand("SELECT customerID FROM Customers WHERE fullName = @name", conn, tx))
             {
-                checkCmd.Parameters.AddWithValue("@name", fullName);
-                checkCmd.Parameters.AddWithValue("@link", facebookLink);
-                var idObj = checkCmd.ExecuteScalar();
+                checkByName.Parameters.AddWithValue("@name", fullName);
+                var idObj = checkByName.ExecuteScalar();
                 if (idObj != null && idObj != DBNull.Value)
                 {
                     return Convert.ToInt32(idObj);
                 }
             }
 
+            // If a non-empty facebookLink was supplied, try to find by it
+            if (!string.IsNullOrWhiteSpace(facebookLink))
+            {
+                using (var checkByLink = new SqlCommand("SELECT customerID FROM Customers WHERE facebookLink = @link", conn, tx))
+                {
+                    checkByLink.Parameters.AddWithValue("@link", facebookLink);
+                    var idObj2 = checkByLink.ExecuteScalar();
+                    if (idObj2 != null && idObj2 != DBNull.Value)
+                    {
+                        return Convert.ToInt32(idObj2);
+                    }
+                }
+            }
+
             const string insertCustomerSql = @"
-INSERT INTO Customers (fullName, facebookLink, CreatedAt)
-VALUES (@name, @link, SYSUTCDATETIME());
-SELECT SCOPE_IDENTITY();";
+    INSERT INTO Customers (fullName, facebookLink, CreatedAt)
+    VALUES (@name, @link, SYSUTCDATETIME());
+    SELECT SCOPE_IDENTITY();";
             using var insertCmd = new SqlCommand(insertCustomerSql, conn, tx);
             insertCmd.Parameters.AddWithValue("@name", fullName);
-            insertCmd.Parameters.AddWithValue("@link", facebookLink);
+            var p = insertCmd.Parameters.Add("@link", SqlDbType.NVarChar, 500);
+            p.Value = string.IsNullOrWhiteSpace(facebookLink) ? (object)DBNull.Value : facebookLink;
             var newIdObj = insertCmd.ExecuteScalar();
             return Convert.ToInt32(newIdObj);
         }
@@ -1492,11 +1591,11 @@ SELECT SCOPE_IDENTITY();";
         private int InsertReservation(SqlConnection conn, SqlTransaction tx, int customerID, string packageSelected, int guests, DateTime checkIn, DateTime checkOut, string notes)
         {
             const string insertReservationSql = @"
-INSERT INTO Reservation
-    (CustomerID, PackageName, PaymentStatus, NumGuests, CheckInDate, CheckOutDate, SpecialNote, BookingStatus, DateCreated, DateModified)
-VALUES
-    (@customerID, @package, @pStatus, @guests, @ci, @co, @notes, @bStatus, SYSUTCDATETIME(), SYSUTCDATETIME());
-SELECT SCOPE_IDENTITY();";
+    INSERT INTO Reservation
+        (CustomerID, PackageName, PaymentStatus, NumGuests, CheckInDate, CheckOutDate, SpecialNote, BookingStatus, DateCreated, DateModified)
+    VALUES
+        (@customerID, @package, @pStatus, @guests, @ci, @co, @notes, @bStatus, SYSUTCDATETIME(), SYSUTCDATETIME());
+    SELECT SCOPE_IDENTITY();";
 
             using var cmd = new SqlCommand(insertReservationSql, conn, tx);
             cmd.Parameters.AddWithValue("@customerID", customerID);
@@ -1552,20 +1651,20 @@ SELECT SCOPE_IDENTITY();";
             {
                 using var conn = CreateConnection();
                 using var cmd = new SqlCommand(@"
-SELECT 
-    R.ReservationID,
-    R.PackageName,
-    R.CheckInDate,
-    R.CheckOutDate,
-    R.NumGuests,
-    R.BookingStatus,
-    P.PaymentStatus,
-    P.AmountPaid,
-    P.PaymentDate
-FROM Reservation R
-LEFT JOIN Payment P ON R.ReservationID = P.ReservationID
-WHERE R.CustomerID = @cid
-ORDER BY R.CheckInDate DESC;", conn);
+    SELECT 
+        R.ReservationID,
+        R.PackageName,
+        R.CheckInDate,
+        R.CheckOutDate,
+        R.NumGuests,
+        R.BookingStatus,
+        P.PaymentStatus,
+        P.AmountPaid,
+        P.PaymentDate
+    FROM Reservation R
+    LEFT JOIN Payment P ON R.ReservationID = P.ReservationID
+    WHERE R.CustomerID = @cid
+    ORDER BY R.CheckInDate DESC;", conn);
                 cmd.Parameters.AddWithValue("@cid", customerId);
 
                 var dt = FillTable(cmd);
@@ -1624,7 +1723,5 @@ ORDER BY R.CheckInDate DESC;", conn);
             if (textBox2 != null) textBox2.Clear();
             if (textBox3 != null) textBox3.Clear();
         }
-
-        
     }
 }
