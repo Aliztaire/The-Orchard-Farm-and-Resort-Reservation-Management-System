@@ -1,4 +1,8 @@
-﻿namespace OrchardFarmRMS
+﻿
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace OrchardFarmRMS
 {
     partial class MainAdminForm
     {
@@ -95,13 +99,10 @@
             label19 = new Label();
             label20 = new Label();
             label21 = new Label();
-            panel6 = new Panel();
-            button9 = new Button();
-            textBox6 = new TextBox();
-            textBox7 = new TextBox();
             label22 = new Label();
+            textBox6 = new TextBox();
             label23 = new Label();
-            label24 = new Label();
+            textBox7 = new TextBox();
             label25 = new Label();
             panel1 = new Panel();
             OrchardLogo = new Label();
@@ -125,7 +126,6 @@
             panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
-            panel6.SuspendLayout();
             SuspendLayout();
             // 
             // tabControl1
@@ -136,10 +136,11 @@
             tabControl1.Controls.Add(tabPage4);
             tabControl1.Controls.Add(tabPage5);
             tabControl1.Controls.Add(tabPage6);
-            tabControl1.Location = new Point(271, 91);
+            tabControl1.Location = new Point(237, 68);
+            tabControl1.Margin = new Padding(3, 2, 3, 2);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(1628, 941);
+            tabControl1.Size = new Size(1424, 706);
             tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -152,11 +153,12 @@
             tabPage1.Controls.Add(searchBox);
             tabPage1.Controls.Add(ReservationLbl);
             tabPage1.Controls.Add(dataGridView1);
-            tabPage1.Font = new Font("Bookman Old Style", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            tabPage1.Location = new Point(4, 29);
+            tabPage1.Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold);
+            tabPage1.Location = new Point(4, 24);
+            tabPage1.Margin = new Padding(3, 2, 3, 2);
             tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(1620, 908);
+            tabPage1.Padding = new Padding(3, 2, 3, 2);
+            tabPage1.Size = new Size(1416, 678);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Reservations";
             tabPage1.UseVisualStyleBackColor = true;
@@ -164,14 +166,13 @@
             // AddResBtn
             // 
             AddResBtn.BackColor = Color.FromArgb(37, 105, 44);
-            AddResBtn.FlatAppearance.BorderColor = Color.FromArgb(0, 64, 0);
-            AddResBtn.FlatAppearance.BorderSize = 0;
             AddResBtn.FlatStyle = FlatStyle.Flat;
-            AddResBtn.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            AddResBtn.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             AddResBtn.ForeColor = SystemColors.Control;
-            AddResBtn.Location = new Point(56, 773);
+            AddResBtn.Location = new Point(49, 580);
+            AddResBtn.Margin = new Padding(3, 2, 3, 2);
             AddResBtn.Name = "AddResBtn";
-            AddResBtn.Size = new Size(465, 50);
+            AddResBtn.Size = new Size(407, 38);
             AddResBtn.TabIndex = 7;
             AddResBtn.Text = "Add Reservation";
             AddResBtn.UseVisualStyleBackColor = false;
@@ -180,14 +181,13 @@
             // DelResBtn
             // 
             DelResBtn.BackColor = Color.FromArgb(154, 35, 58);
-            DelResBtn.FlatAppearance.BorderColor = Color.FromArgb(0, 64, 0);
-            DelResBtn.FlatAppearance.BorderSize = 0;
             DelResBtn.FlatStyle = FlatStyle.Flat;
-            DelResBtn.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            DelResBtn.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             DelResBtn.ForeColor = SystemColors.ButtonHighlight;
-            DelResBtn.Location = new Point(1081, 773);
+            DelResBtn.Location = new Point(946, 580);
+            DelResBtn.Margin = new Padding(3, 2, 3, 2);
             DelResBtn.Name = "DelResBtn";
-            DelResBtn.Size = new Size(465, 50);
+            DelResBtn.Size = new Size(407, 38);
             DelResBtn.TabIndex = 6;
             DelResBtn.Text = "Delete Reservation";
             DelResBtn.UseVisualStyleBackColor = false;
@@ -195,33 +195,33 @@
             // EditResBtn
             // 
             EditResBtn.BackColor = Color.FromArgb(60, 62, 128);
-            EditResBtn.FlatAppearance.BorderColor = Color.FromArgb(0, 64, 0);
-            EditResBtn.FlatAppearance.BorderSize = 0;
             EditResBtn.FlatStyle = FlatStyle.Flat;
-            EditResBtn.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            EditResBtn.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             EditResBtn.ForeColor = SystemColors.Control;
-            EditResBtn.Location = new Point(567, 773);
+            EditResBtn.Location = new Point(496, 580);
+            EditResBtn.Margin = new Padding(3, 2, 3, 2);
             EditResBtn.Name = "EditResBtn";
-            EditResBtn.Size = new Size(465, 50);
+            EditResBtn.Size = new Size(407, 38);
             EditResBtn.TabIndex = 5;
             EditResBtn.Text = "Edit Reservation";
             EditResBtn.UseVisualStyleBackColor = false;
             // 
             // searchBox
             // 
-            searchBox.Font = new Font("Bookman Old Style", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            searchBox.Location = new Point(139, 143);
+            searchBox.Font = new Font("Microsoft Sans Serif", 16.2F);
+            searchBox.Location = new Point(122, 107);
+            searchBox.Margin = new Padding(3, 2, 3, 2);
             searchBox.Name = "searchBox";
-            searchBox.Size = new Size(1407, 39);
+            searchBox.Size = new Size(1232, 32);
             searchBox.TabIndex = 2;
             // 
             // ReservationLbl
             // 
             ReservationLbl.AutoSize = true;
-            ReservationLbl.Font = new Font("Bookman Old Style", 28.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            ReservationLbl.Location = new Point(621, 68);
+            ReservationLbl.Font = new Font("Microsoft Sans Serif", 28.2F, FontStyle.Bold);
+            ReservationLbl.Location = new Point(543, 51);
             ReservationLbl.Name = "ReservationLbl";
-            ReservationLbl.Size = new Size(340, 56);
+            ReservationLbl.Size = new Size(253, 44);
             ReservationLbl.TabIndex = 1;
             ReservationLbl.Text = "Reservations";
             // 
@@ -229,10 +229,11 @@
             // 
             dataGridView1.BackgroundColor = Color.White;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(56, 233);
+            dataGridView1.Location = new Point(49, 175);
+            dataGridView1.Margin = new Padding(3, 2, 3, 2);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(1490, 508);
+            dataGridView1.Size = new Size(1304, 381);
             dataGridView1.TabIndex = 0;
             // 
             // tabPage2
@@ -244,10 +245,11 @@
             tabPage2.Controls.Add(textBox1);
             tabPage2.Controls.Add(label11);
             tabPage2.Controls.Add(dataGridView2);
-            tabPage2.Location = new Point(4, 29);
+            tabPage2.Location = new Point(4, 24);
+            tabPage2.Margin = new Padding(3, 2, 3, 2);
             tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(1620, 908);
+            tabPage2.Padding = new Padding(3, 2, 3, 2);
+            tabPage2.Size = new Size(1416, 678);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Customers";
             tabPage2.UseVisualStyleBackColor = true;
@@ -255,49 +257,47 @@
             // button1
             // 
             button1.BackColor = Color.FromArgb(37, 105, 44);
-            button1.FlatAppearance.BorderColor = Color.FromArgb(0, 64, 0);
-            button1.FlatAppearance.BorderSize = 0;
             button1.FlatStyle = FlatStyle.Flat;
-            button1.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button1.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             button1.ForeColor = SystemColors.Control;
-            button1.Location = new Point(65, 782);
+            button1.Location = new Point(57, 586);
+            button1.Margin = new Padding(3, 2, 3, 2);
             button1.Name = "button1";
-            button1.Size = new Size(465, 50);
+            button1.Size = new Size(407, 38);
             button1.TabIndex = 12;
             button1.Text = "Edit Customer Info";
             button1.UseVisualStyleBackColor = false;
-            button1.Click += button1_Click;
             // 
             // button2
             // 
             button2.BackColor = Color.FromArgb(60, 62, 128);
-            button2.FlatAppearance.BorderColor = Color.FromArgb(0, 64, 0);
-            button2.FlatAppearance.BorderSize = 0;
             button2.FlatStyle = FlatStyle.Flat;
-            button2.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button2.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             button2.ForeColor = SystemColors.Control;
-            button2.Location = new Point(576, 782);
+            button2.Location = new Point(504, 586);
+            button2.Margin = new Padding(3, 2, 3, 2);
             button2.Name = "button2";
-            button2.Size = new Size(465, 50);
+            button2.Size = new Size(407, 38);
             button2.TabIndex = 11;
             button2.Text = "View Customer History";
             button2.UseVisualStyleBackColor = false;
             // 
             // textBox1
             // 
-            textBox1.Font = new Font("Bookman Old Style", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            textBox1.Location = new Point(148, 152);
+            textBox1.Font = new Font("Microsoft Sans Serif", 16.2F);
+            textBox1.Location = new Point(130, 114);
+            textBox1.Margin = new Padding(3, 2, 3, 2);
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(1407, 39);
+            textBox1.Size = new Size(1232, 32);
             textBox1.TabIndex = 10;
             // 
             // label11
             // 
             label11.AutoSize = true;
-            label11.Font = new Font("Bookman Old Style", 28.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label11.Location = new Point(630, 77);
+            label11.Font = new Font("Microsoft Sans Serif", 28.2F, FontStyle.Bold);
+            label11.Location = new Point(551, 58);
             label11.Name = "label11";
-            label11.Size = new Size(285, 56);
+            label11.Size = new Size(213, 44);
             label11.TabIndex = 9;
             label11.Text = "Customers";
             // 
@@ -305,10 +305,11 @@
             // 
             dataGridView2.BackgroundColor = Color.White;
             dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView2.Location = new Point(65, 242);
+            dataGridView2.Location = new Point(57, 182);
+            dataGridView2.Margin = new Padding(3, 2, 3, 2);
             dataGridView2.Name = "dataGridView2";
             dataGridView2.RowHeadersWidth = 51;
-            dataGridView2.Size = new Size(1490, 508);
+            dataGridView2.Size = new Size(1304, 381);
             dataGridView2.TabIndex = 8;
             // 
             // tabPage3
@@ -320,9 +321,10 @@
             tabPage3.Controls.Add(panel3);
             tabPage3.Controls.Add(panel2);
             tabPage3.Controls.Add(guestStayLbl);
-            tabPage3.Location = new Point(4, 29);
+            tabPage3.Location = new Point(4, 24);
+            tabPage3.Margin = new Padding(3, 2, 3, 2);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(1620, 908);
+            tabPage3.Size = new Size(1416, 678);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "AddReservation";
             tabPage3.UseVisualStyleBackColor = true;
@@ -330,13 +332,13 @@
             // cancelBtn
             // 
             cancelBtn.BackColor = Color.FromArgb(154, 35, 38);
-            cancelBtn.FlatAppearance.BorderSize = 0;
             cancelBtn.FlatStyle = FlatStyle.Flat;
-            cancelBtn.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            cancelBtn.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             cancelBtn.ForeColor = Color.White;
-            cancelBtn.Location = new Point(46, 846);
+            cancelBtn.Location = new Point(40, 634);
+            cancelBtn.Margin = new Padding(3, 2, 3, 2);
             cancelBtn.Name = "cancelBtn";
-            cancelBtn.Size = new Size(307, 47);
+            cancelBtn.Size = new Size(269, 35);
             cancelBtn.TabIndex = 17;
             cancelBtn.Text = "Cancel";
             cancelBtn.UseVisualStyleBackColor = false;
@@ -345,13 +347,13 @@
             // confirmBtn
             // 
             confirmBtn.BackColor = Color.FromArgb(39, 114, 47);
-            confirmBtn.FlatAppearance.BorderSize = 0;
             confirmBtn.FlatStyle = FlatStyle.Flat;
-            confirmBtn.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            confirmBtn.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             confirmBtn.ForeColor = Color.White;
-            confirmBtn.Location = new Point(1169, 846);
+            confirmBtn.Location = new Point(1023, 634);
+            confirmBtn.Margin = new Padding(3, 2, 3, 2);
             confirmBtn.Name = "confirmBtn";
-            confirmBtn.Size = new Size(307, 47);
+            confirmBtn.Size = new Size(269, 35);
             confirmBtn.TabIndex = 16;
             confirmBtn.Text = "Confirm Reservation";
             confirmBtn.UseVisualStyleBackColor = false;
@@ -373,21 +375,22 @@
             panel3.Controls.Add(label5);
             panel3.Controls.Add(label4);
             panel3.ForeColor = SystemColors.ActiveBorder;
-            panel3.Location = new Point(46, 433);
+            panel3.Location = new Point(40, 325);
+            panel3.Margin = new Padding(3, 2, 3, 2);
             panel3.Name = "panel3";
-            panel3.Size = new Size(1430, 394);
+            panel3.Size = new Size(1252, 296);
             panel3.TabIndex = 2;
             // 
             // ResClearBtn
             // 
             ResClearBtn.BackColor = Color.FromArgb(158, 226, 167);
-            ResClearBtn.FlatAppearance.BorderSize = 0;
             ResClearBtn.FlatStyle = FlatStyle.Flat;
-            ResClearBtn.Font = new Font("Bookman Old Style", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            ResClearBtn.Font = new Font("Microsoft Sans Serif", 10.8F, FontStyle.Bold);
             ResClearBtn.ForeColor = SystemColors.ActiveCaptionText;
-            ResClearBtn.Location = new Point(811, 357);
+            ResClearBtn.Location = new Point(710, 262);
+            ResClearBtn.Margin = new Padding(3, 2, 3, 2);
             ResClearBtn.Name = "ResClearBtn";
-            ResClearBtn.Size = new Size(146, 29);
+            ResClearBtn.Size = new Size(128, 28);
             ResClearBtn.TabIndex = 8;
             ResClearBtn.Text = "Clear";
             ResClearBtn.UseVisualStyleBackColor = false;
@@ -395,110 +398,115 @@
             // 
             // noteBox
             // 
-            noteBox.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            noteBox.Location = new Point(525, 268);
+            noteBox.Font = new Font("Microsoft Sans Serif", 13.8F);
+            noteBox.Location = new Point(459, 201);
+            noteBox.Margin = new Padding(3, 2, 3, 2);
             noteBox.Multiline = true;
             noteBox.Name = "noteBox";
-            noteBox.Size = new Size(432, 75);
+            noteBox.Size = new Size(378, 57);
             noteBox.TabIndex = 15;
             // 
             // checkOutDateBox
             // 
-            checkOutDateBox.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            checkOutDateBox.Location = new Point(524, 214);
+            checkOutDateBox.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
+            checkOutDateBox.Location = new Point(458, 160);
+            checkOutDateBox.Margin = new Padding(3, 2, 3, 2);
             checkOutDateBox.Name = "checkOutDateBox";
-            checkOutDateBox.Size = new Size(432, 34);
+            checkOutDateBox.Size = new Size(378, 28);
             checkOutDateBox.TabIndex = 14;
             // 
             // checkInDateBox
             // 
-            checkInDateBox.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            checkInDateBox.Location = new Point(525, 160);
+            checkInDateBox.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
+            checkInDateBox.Location = new Point(459, 120);
+            checkInDateBox.Margin = new Padding(3, 2, 3, 2);
             checkInDateBox.Name = "checkInDateBox";
-            checkInDateBox.Size = new Size(432, 34);
+            checkInDateBox.Size = new Size(378, 28);
             checkInDateBox.TabIndex = 13;
             // 
             // guestBox
             // 
-            guestBox.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            guestBox.Location = new Point(525, 109);
+            guestBox.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
+            guestBox.Location = new Point(459, 82);
+            guestBox.Margin = new Padding(3, 2, 3, 2);
             guestBox.Name = "guestBox";
-            guestBox.Size = new Size(432, 34);
+            guestBox.Size = new Size(378, 28);
             guestBox.TabIndex = 12;
             // 
             // packageBox
             // 
-            packageBox.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            packageBox.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             packageBox.FormattingEnabled = true;
             packageBox.Items.AddRange(new object[] { "test package 1", "test package 2" });
-            packageBox.Location = new Point(525, 59);
+            packageBox.Location = new Point(459, 44);
+            packageBox.Margin = new Padding(3, 2, 3, 2);
             packageBox.Name = "packageBox";
-            packageBox.Size = new Size(432, 36);
+            packageBox.Size = new Size(378, 30);
             packageBox.TabIndex = 11;
             // 
             // label9
             // 
             label9.AutoSize = true;
-            label9.Font = new Font("Bookman Old Style", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label9.Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold);
             label9.ForeColor = SystemColors.ActiveCaptionText;
-            label9.Location = new Point(28, 7);
+            label9.Location = new Point(24, 5);
             label9.Name = "label9";
-            label9.Size = new Size(319, 36);
+            label9.Size = new Size(240, 29);
             label9.TabIndex = 10;
             label9.Text = "Reservation Details";
             // 
             // label8
             // 
             label8.AutoSize = true;
-            label8.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold);
+            label8.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             label8.ForeColor = SystemColors.ActiveCaptionText;
-            label8.Location = new Point(37, 268);
+            label8.Location = new Point(32, 201);
             label8.Name = "label8";
-            label8.Size = new Size(162, 28);
+            label8.Size = new Size(129, 24);
             label8.TabIndex = 9;
             label8.Text = "Special Note";
             // 
             // label7
             // 
             label7.AutoSize = true;
-            label7.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold);
+            label7.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             label7.ForeColor = SystemColors.ActiveCaptionText;
-            label7.Location = new Point(33, 217);
+            label7.Location = new Point(29, 163);
             label7.Name = "label7";
-            label7.Size = new Size(201, 28);
+            label7.Size = new Size(157, 24);
             label7.TabIndex = 8;
             label7.Text = "Check-Out Date";
             // 
             // label6
             // 
             label6.AutoSize = true;
-            label6.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold);
+            label6.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             label6.ForeColor = SystemColors.ActiveCaptionText;
-            label6.Location = new Point(35, 166);
+            label6.Location = new Point(31, 124);
             label6.Name = "label6";
-            label6.Size = new Size(182, 28);
+            label6.Size = new Size(141, 24);
             label6.TabIndex = 7;
             label6.Text = "Check-In Date";
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold);
+            label5.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             label5.ForeColor = SystemColors.ActiveCaptionText;
-            label5.Location = new Point(36, 115);
+            label5.Location = new Point(32, 86);
             label5.Name = "label5";
-            label5.Size = new Size(172, 28);
+            label5.Size = new Size(136, 24);
             label5.TabIndex = 6;
             label5.Text = "No. of Guests";
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold);
+            label4.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             label4.ForeColor = SystemColors.ActiveCaptionText;
-            label4.Location = new Point(36, 64);
+            label4.Location = new Point(32, 48);
             label4.Name = "label4";
-            label4.Size = new Size(174, 28);
+            label4.Size = new Size(143, 24);
             label4.TabIndex = 5;
             label4.Text = "Package Type";
             // 
@@ -512,21 +520,22 @@
             panel2.Controls.Add(label2);
             panel2.Controls.Add(label1);
             panel2.ForeColor = SystemColors.ActiveBorder;
-            panel2.Location = new Point(46, 198);
+            panel2.Location = new Point(40, 148);
+            panel2.Margin = new Padding(3, 2, 3, 2);
             panel2.Name = "panel2";
-            panel2.Size = new Size(1430, 240);
+            panel2.Size = new Size(1252, 180);
             panel2.TabIndex = 1;
             // 
             // CustomerClearBtn
             // 
             CustomerClearBtn.BackColor = Color.FromArgb(158, 226, 167);
-            CustomerClearBtn.FlatAppearance.BorderSize = 0;
             CustomerClearBtn.FlatStyle = FlatStyle.Flat;
-            CustomerClearBtn.Font = new Font("Bookman Old Style", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            CustomerClearBtn.Font = new Font("Microsoft Sans Serif", 10.8F, FontStyle.Bold);
             CustomerClearBtn.ForeColor = SystemColors.ActiveCaptionText;
-            CustomerClearBtn.Location = new Point(811, 178);
+            CustomerClearBtn.Location = new Point(710, 134);
+            CustomerClearBtn.Margin = new Padding(3, 2, 3, 2);
             CustomerClearBtn.Name = "CustomerClearBtn";
-            CustomerClearBtn.Size = new Size(146, 29);
+            CustomerClearBtn.Size = new Size(128, 38);
             CustomerClearBtn.TabIndex = 9;
             CustomerClearBtn.Text = "Clear";
             CustomerClearBtn.UseVisualStyleBackColor = false;
@@ -534,60 +543,62 @@
             // 
             // ContactBox
             // 
-            ContactBox.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            ContactBox.Location = new Point(525, 119);
+            ContactBox.Font = new Font("Microsoft Sans Serif", 13.8F);
+            ContactBox.Location = new Point(459, 89);
+            ContactBox.Margin = new Padding(3, 2, 3, 2);
             ContactBox.Name = "ContactBox";
-            ContactBox.Size = new Size(432, 34);
+            ContactBox.Size = new Size(378, 28);
             ContactBox.TabIndex = 7;
             // 
             // NameBox
             // 
-            NameBox.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            NameBox.Location = new Point(525, 69);
+            NameBox.Font = new Font("Microsoft Sans Serif", 13.8F);
+            NameBox.Location = new Point(459, 52);
+            NameBox.Margin = new Padding(3, 2, 3, 2);
             NameBox.Name = "NameBox";
-            NameBox.Size = new Size(432, 34);
+            NameBox.Size = new Size(378, 28);
             NameBox.TabIndex = 6;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold);
+            label3.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             label3.ForeColor = SystemColors.ActiveCaptionText;
-            label3.Location = new Point(33, 125);
+            label3.Location = new Point(29, 94);
             label3.Name = "label3";
-            label3.Size = new Size(224, 28);
+            label3.Size = new Size(170, 24);
             label3.TabIndex = 5;
             label3.Text = "Contact (FB Link)";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold);
+            label2.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             label2.ForeColor = SystemColors.ActiveCaptionText;
-            label2.Location = new Point(33, 76);
+            label2.Location = new Point(29, 57);
             label2.Name = "label2";
-            label2.Size = new Size(134, 28);
+            label2.Size = new Size(106, 24);
             label2.TabIndex = 4;
             label2.Text = "Full Name";
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Bookman Old Style", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold);
             label1.ForeColor = SystemColors.ActiveCaptionText;
-            label1.Location = new Point(20, 11);
+            label1.Location = new Point(18, 8);
             label1.Name = "label1";
-            label1.Size = new Size(285, 36);
+            label1.Size = new Size(213, 29);
             label1.TabIndex = 3;
             label1.Text = "Customer Details";
             // 
             // guestStayLbl
             // 
             guestStayLbl.AutoSize = true;
-            guestStayLbl.Font = new Font("Bookman Old Style", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            guestStayLbl.Location = new Point(33, 93);
+            guestStayLbl.Font = new Font("Microsoft Sans Serif", 24F, FontStyle.Bold);
+            guestStayLbl.Location = new Point(29, 70);
             guestStayLbl.Name = "guestStayLbl";
-            guestStayLbl.Size = new Size(493, 47);
+            guestStayLbl.Size = new Size(365, 37);
             guestStayLbl.TabIndex = 0;
             guestStayLbl.Text = "Guest and Stay Details";
             // 
@@ -596,10 +607,11 @@
             tabPage4.BackgroundImage = Properties.Resources.ReservationsBG;
             tabPage4.Controls.Add(panel4);
             tabPage4.Controls.Add(label14);
-            tabPage4.Location = new Point(4, 29);
+            tabPage4.Location = new Point(4, 24);
+            tabPage4.Margin = new Padding(3, 2, 3, 2);
             tabPage4.Name = "tabPage4";
-            tabPage4.Padding = new Padding(3);
-            tabPage4.Size = new Size(1620, 908);
+            tabPage4.Padding = new Padding(3, 2, 3, 2);
+            tabPage4.Size = new Size(1416, 678);
             tabPage4.TabIndex = 3;
             tabPage4.Text = "Customer Details";
             tabPage4.UseVisualStyleBackColor = true;
@@ -614,81 +626,84 @@
             panel4.Controls.Add(label12);
             panel4.Controls.Add(label13);
             panel4.ForeColor = SystemColors.ActiveBorder;
-            panel4.Location = new Point(102, 387);
+            panel4.Location = new Point(89, 290);
+            panel4.Margin = new Padding(3, 2, 3, 2);
             panel4.Name = "panel4";
-            panel4.Size = new Size(1430, 240);
+            panel4.Size = new Size(1252, 180);
             panel4.TabIndex = 3;
             // 
             // button3
             // 
             button3.BackColor = Color.FromArgb(158, 226, 167);
-            button3.FlatAppearance.BorderSize = 0;
             button3.FlatStyle = FlatStyle.Flat;
-            button3.Font = new Font("Bookman Old Style", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button3.Font = new Font("Microsoft Sans Serif", 10.8F, FontStyle.Bold);
             button3.ForeColor = SystemColors.ActiveCaptionText;
-            button3.Location = new Point(811, 178);
+            button3.Location = new Point(710, 134);
+            button3.Margin = new Padding(3, 2, 3, 2);
             button3.Name = "button3";
-            button3.Size = new Size(146, 29);
+            button3.Size = new Size(128, 29);
             button3.TabIndex = 9;
             button3.Text = "Clear";
             button3.UseVisualStyleBackColor = false;
             // 
             // textBox2
             // 
-            textBox2.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            textBox2.Location = new Point(525, 119);
+            textBox2.Font = new Font("Microsoft Sans Serif", 13.8F);
+            textBox2.Location = new Point(459, 89);
+            textBox2.Margin = new Padding(3, 2, 3, 2);
             textBox2.Name = "textBox2";
-            textBox2.Size = new Size(432, 34);
+            textBox2.Size = new Size(378, 28);
             textBox2.TabIndex = 7;
             // 
             // textBox3
             // 
-            textBox3.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            textBox3.Location = new Point(525, 69);
+            textBox3.Font = new Font("Microsoft Sans Serif", 13.8F);
+            textBox3.Location = new Point(459, 52);
+            textBox3.Margin = new Padding(3, 2, 3, 2);
             textBox3.Name = "textBox3";
-            textBox3.Size = new Size(432, 34);
+            textBox3.Size = new Size(378, 28);
             textBox3.TabIndex = 6;
             // 
             // label10
             // 
             label10.AutoSize = true;
-            label10.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold);
+            label10.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             label10.ForeColor = SystemColors.ActiveCaptionText;
-            label10.Location = new Point(33, 125);
+            label10.Location = new Point(29, 94);
             label10.Name = "label10";
-            label10.Size = new Size(224, 28);
+            label10.Size = new Size(170, 24);
             label10.TabIndex = 5;
             label10.Text = "Contact (FB Link)";
             // 
             // label12
             // 
             label12.AutoSize = true;
-            label12.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold);
+            label12.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             label12.ForeColor = SystemColors.ActiveCaptionText;
-            label12.Location = new Point(33, 76);
+            label12.Location = new Point(29, 57);
             label12.Name = "label12";
-            label12.Size = new Size(134, 28);
+            label12.Size = new Size(106, 24);
             label12.TabIndex = 4;
             label12.Text = "Full Name";
             // 
             // label13
             // 
             label13.AutoSize = true;
-            label13.Font = new Font("Bookman Old Style", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label13.Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold);
             label13.ForeColor = SystemColors.ActiveCaptionText;
-            label13.Location = new Point(20, 11);
+            label13.Location = new Point(18, 8);
             label13.Name = "label13";
-            label13.Size = new Size(239, 36);
+            label13.Size = new Size(175, 29);
             label13.TabIndex = 3;
             label13.Text = "Customer Info";
             // 
             // label14
             // 
             label14.AutoSize = true;
-            label14.Font = new Font("Bookman Old Style", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label14.Location = new Point(89, 282);
+            label14.Font = new Font("Microsoft Sans Serif", 24F, FontStyle.Bold);
+            label14.Location = new Point(78, 212);
             label14.Name = "label14";
-            label14.Size = new Size(379, 47);
+            label14.Size = new Size(278, 37);
             label14.TabIndex = 2;
             label14.Text = "Customer Details";
             // 
@@ -700,10 +715,11 @@
             tabPage5.Controls.Add(textBox4);
             tabPage5.Controls.Add(label15);
             tabPage5.Controls.Add(dataGridView3);
-            tabPage5.Location = new Point(4, 29);
+            tabPage5.Location = new Point(4, 24);
+            tabPage5.Margin = new Padding(3, 2, 3, 2);
             tabPage5.Name = "tabPage5";
-            tabPage5.Padding = new Padding(3);
-            tabPage5.Size = new Size(1620, 908);
+            tabPage5.Padding = new Padding(3, 2, 3, 2);
+            tabPage5.Size = new Size(1416, 678);
             tabPage5.TabIndex = 4;
             tabPage5.Text = "Payments";
             tabPage5.UseVisualStyleBackColor = true;
@@ -711,14 +727,13 @@
             // button4
             // 
             button4.BackColor = Color.FromArgb(37, 105, 44);
-            button4.FlatAppearance.BorderColor = Color.FromArgb(0, 64, 0);
-            button4.FlatAppearance.BorderSize = 0;
             button4.FlatStyle = FlatStyle.Flat;
-            button4.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button4.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             button4.ForeColor = SystemColors.Control;
-            button4.Location = new Point(65, 782);
+            button4.Location = new Point(57, 586);
+            button4.Margin = new Padding(3, 2, 3, 2);
             button4.Name = "button4";
-            button4.Size = new Size(465, 50);
+            button4.Size = new Size(407, 38);
             button4.TabIndex = 17;
             button4.Text = "Update Payment Record";
             button4.UseVisualStyleBackColor = false;
@@ -726,34 +741,34 @@
             // 
             // button5
             // 
-            button5.BackColor = Color.FromArgb(60, 62, 128);
-            button5.FlatAppearance.BorderColor = Color.FromArgb(0, 64, 0);
-            button5.FlatAppearance.BorderSize = 0;
+            button5.BackColor = Color.FromArgb(154, 35, 38);
             button5.FlatStyle = FlatStyle.Flat;
-            button5.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button5.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             button5.ForeColor = SystemColors.Control;
-            button5.Location = new Point(576, 782);
+            button5.Location = new Point(504, 586);
+            button5.Margin = new Padding(3, 2, 3, 2);
             button5.Name = "button5";
-            button5.Size = new Size(465, 50);
+            button5.Size = new Size(407, 38);
             button5.TabIndex = 16;
             button5.Text = "Delete Payment Record";
             button5.UseVisualStyleBackColor = false;
             // 
             // textBox4
             // 
-            textBox4.Font = new Font("Bookman Old Style", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            textBox4.Location = new Point(148, 152);
+            textBox4.Font = new Font("Microsoft Sans Serif", 16.2F);
+            textBox4.Location = new Point(130, 114);
+            textBox4.Margin = new Padding(3, 2, 3, 2);
             textBox4.Name = "textBox4";
-            textBox4.Size = new Size(1407, 39);
+            textBox4.Size = new Size(1232, 32);
             textBox4.TabIndex = 15;
             // 
             // label15
             // 
             label15.AutoSize = true;
-            label15.Font = new Font("Bookman Old Style", 28.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label15.Location = new Point(630, 77);
+            label15.Font = new Font("Microsoft Sans Serif", 28.2F, FontStyle.Bold);
+            label15.Location = new Point(551, 58);
             label15.Name = "label15";
-            label15.Size = new Size(263, 56);
+            label15.Size = new Size(197, 44);
             label15.TabIndex = 14;
             label15.Text = "Payments";
             // 
@@ -761,10 +776,11 @@
             // 
             dataGridView3.BackgroundColor = Color.White;
             dataGridView3.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView3.Location = new Point(65, 242);
+            dataGridView3.Location = new Point(57, 182);
+            dataGridView3.Margin = new Padding(3, 2, 3, 2);
             dataGridView3.Name = "dataGridView3";
             dataGridView3.RowHeadersWidth = 51;
-            dataGridView3.Size = new Size(1490, 508);
+            dataGridView3.Size = new Size(1304, 381);
             dataGridView3.TabIndex = 13;
             // 
             // tabPage6
@@ -773,26 +789,26 @@
             tabPage6.Controls.Add(button7);
             tabPage6.Controls.Add(button8);
             tabPage6.Controls.Add(panel5);
-            tabPage6.Controls.Add(panel6);
             tabPage6.Controls.Add(label25);
-            tabPage6.Location = new Point(4, 29);
+            tabPage6.Location = new Point(4, 24);
+            tabPage6.Margin = new Padding(3, 2, 3, 2);
             tabPage6.Name = "tabPage6";
-            tabPage6.Padding = new Padding(3);
-            tabPage6.Size = new Size(1620, 908);
+            tabPage6.Padding = new Padding(3, 2, 3, 2);
+            tabPage6.Size = new Size(1416, 678);
             tabPage6.TabIndex = 5;
-            tabPage6.Text = "Payment Details";
+            tabPage6.Text = "Payment Update";
             tabPage6.UseVisualStyleBackColor = true;
             // 
             // button7
             // 
             button7.BackColor = Color.FromArgb(154, 35, 38);
-            button7.FlatAppearance.BorderSize = 0;
             button7.FlatStyle = FlatStyle.Flat;
-            button7.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button7.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             button7.ForeColor = Color.White;
-            button7.Location = new Point(102, 807);
+            button7.Location = new Point(106, 493);
+            button7.Margin = new Padding(3, 2, 3, 2);
             button7.Name = "button7";
-            button7.Size = new Size(307, 47);
+            button7.Size = new Size(269, 35);
             button7.TabIndex = 22;
             button7.Text = "Cancel";
             button7.UseVisualStyleBackColor = false;
@@ -800,13 +816,13 @@
             // button8
             // 
             button8.BackColor = Color.FromArgb(39, 114, 47);
-            button8.FlatAppearance.BorderSize = 0;
             button8.FlatStyle = FlatStyle.Flat;
-            button8.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button8.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             button8.ForeColor = Color.White;
-            button8.Location = new Point(1225, 807);
+            button8.Location = new Point(1089, 493);
+            button8.Margin = new Padding(3, 2, 3, 2);
             button8.Name = "button8";
-            button8.Size = new Size(307, 47);
+            button8.Size = new Size(269, 35);
             button8.TabIndex = 21;
             button8.Text = "Confirm Reservation";
             button8.UseVisualStyleBackColor = false;
@@ -824,230 +840,201 @@
             panel5.Controls.Add(label19);
             panel5.Controls.Add(label20);
             panel5.Controls.Add(label21);
+            panel5.Controls.Add(label22);
+            panel5.Controls.Add(textBox6);
+            panel5.Controls.Add(label23);
+            panel5.Controls.Add(textBox7);
             panel5.ForeColor = SystemColors.ActiveBorder;
-            panel5.Location = new Point(102, 394);
+            panel5.Location = new Point(106, 152);
+            panel5.Margin = new Padding(3, 2, 3, 2);
             panel5.Name = "panel5";
-            panel5.Size = new Size(1430, 394);
+            panel5.Size = new Size(1252, 290);
             panel5.TabIndex = 20;
             // 
             // pictureBox1
             // 
-            pictureBox1.Location = new Point(654, 200);
+            pictureBox1.Location = new Point(858, 48);
+            pictureBox1.Margin = new Padding(3, 2, 3, 2);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(186, 138);
+            pictureBox1.Size = new Size(315, 180);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 14;
             pictureBox1.TabStop = false;
             // 
             // button6
             // 
             button6.BackColor = Color.FromArgb(158, 226, 167);
-            button6.FlatAppearance.BorderSize = 0;
             button6.FlatStyle = FlatStyle.Flat;
-            button6.Font = new Font("Bookman Old Style", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button6.Font = new Font("Microsoft Sans Serif", 10.8F, FontStyle.Bold);
             button6.ForeColor = SystemColors.ActiveCaptionText;
-            button6.Location = new Point(811, 357);
+            button6.Location = new Point(998, 240);
+            button6.Margin = new Padding(3, 2, 3, 2);
             button6.Name = "button6";
-            button6.Size = new Size(146, 29);
+            button6.Size = new Size(105, 35);
             button6.TabIndex = 8;
-            button6.Text = "Clear";
+            button6.Text = "Browse...";
             button6.UseVisualStyleBackColor = false;
             // 
             // dateTimePicker1
             // 
-            dateTimePicker1.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            dateTimePicker1.Location = new Point(525, 160);
+            dateTimePicker1.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
+            dateTimePicker1.Location = new Point(459, 179);
+            dateTimePicker1.Margin = new Padding(3, 2, 3, 2);
             dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(432, 34);
+            dateTimePicker1.Size = new Size(316, 28);
             dateTimePicker1.TabIndex = 13;
             // 
             // numericUpDown1
             // 
-            numericUpDown1.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            numericUpDown1.Location = new Point(525, 109);
+            numericUpDown1.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
+            numericUpDown1.Location = new Point(459, 146);
+            numericUpDown1.Margin = new Padding(3, 2, 3, 2);
             numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new Size(432, 34);
+            numericUpDown1.Size = new Size(315, 28);
             numericUpDown1.TabIndex = 12;
             // 
             // comboBox1
             // 
-            comboBox1.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            comboBox1.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             comboBox1.FormattingEnabled = true;
-            comboBox1.Items.AddRange(new object[] { "test package 1", "test package 2" });
-            comboBox1.Location = new Point(525, 59);
+            comboBox1.Location = new Point(459, 44);
+            comboBox1.Margin = new Padding(3, 2, 3, 2);
             comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(432, 36);
+            comboBox1.Size = new Size(316, 30);
             comboBox1.TabIndex = 11;
             // 
             // label16
             // 
             label16.AutoSize = true;
-            label16.Font = new Font("Bookman Old Style", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label16.Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold);
             label16.ForeColor = SystemColors.ActiveCaptionText;
-            label16.Location = new Point(28, 7);
+            label16.Location = new Point(24, 5);
             label16.Name = "label16";
-            label16.Size = new Size(273, 36);
+            label16.Size = new Size(163, 29);
             label16.TabIndex = 10;
-            label16.Text = "Reservation Info";
+            label16.Text = "Payment Info";
             // 
             // label17
             // 
             label17.AutoSize = true;
-            label17.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold);
+            label17.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             label17.ForeColor = SystemColors.ActiveCaptionText;
-            label17.Location = new Point(37, 268);
+            label17.Location = new Point(32, 219);
             label17.Name = "label17";
-            label17.Size = new Size(188, 28);
+            label17.Size = new Size(145, 24);
             label17.TabIndex = 9;
             label17.Text = "Payment Proof";
             // 
             // label19
             // 
             label19.AutoSize = true;
-            label19.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold);
+            label19.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             label19.ForeColor = SystemColors.ActiveCaptionText;
-            label19.Location = new Point(35, 166);
+            label19.Location = new Point(32, 183);
             label19.Name = "label19";
-            label19.Size = new Size(180, 28);
+            label19.Size = new Size(138, 24);
             label19.TabIndex = 7;
             label19.Text = "Payment Date";
             // 
             // label20
             // 
             label20.AutoSize = true;
-            label20.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold);
+            label20.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             label20.ForeColor = SystemColors.ActiveCaptionText;
-            label20.Location = new Point(36, 115);
+            label20.Location = new Point(32, 150);
             label20.Name = "label20";
-            label20.Size = new Size(167, 28);
+            label20.Size = new Size(129, 24);
             label20.TabIndex = 6;
             label20.Text = "Amount Paid";
             // 
             // label21
             // 
             label21.AutoSize = true;
-            label21.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold);
+            label21.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             label21.ForeColor = SystemColors.ActiveCaptionText;
-            label21.Location = new Point(36, 64);
+            label21.Location = new Point(32, 48);
             label21.Name = "label21";
-            label21.Size = new Size(152, 28);
+            label21.Size = new Size(66, 24);
             label21.TabIndex = 5;
-            label21.Text = "Payment ID";
-            // 
-            // panel6
-            // 
-            panel6.BorderStyle = BorderStyle.FixedSingle;
-            panel6.Controls.Add(button9);
-            panel6.Controls.Add(textBox6);
-            panel6.Controls.Add(textBox7);
-            panel6.Controls.Add(label22);
-            panel6.Controls.Add(label23);
-            panel6.Controls.Add(label24);
-            panel6.ForeColor = SystemColors.ActiveBorder;
-            panel6.Location = new Point(102, 159);
-            panel6.Name = "panel6";
-            panel6.Size = new Size(1430, 240);
-            panel6.TabIndex = 19;
-            // 
-            // button9
-            // 
-            button9.BackColor = Color.FromArgb(158, 226, 167);
-            button9.FlatAppearance.BorderSize = 0;
-            button9.FlatStyle = FlatStyle.Flat;
-            button9.Font = new Font("Bookman Old Style", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button9.ForeColor = SystemColors.ActiveCaptionText;
-            button9.Location = new Point(811, 178);
-            button9.Name = "button9";
-            button9.Size = new Size(146, 29);
-            button9.TabIndex = 9;
-            button9.Text = "Clear";
-            button9.UseVisualStyleBackColor = false;
-            // 
-            // textBox6
-            // 
-            textBox6.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            textBox6.Location = new Point(525, 119);
-            textBox6.Name = "textBox6";
-            textBox6.Size = new Size(432, 34);
-            textBox6.TabIndex = 7;
-            // 
-            // textBox7
-            // 
-            textBox7.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            textBox7.Location = new Point(525, 69);
-            textBox7.Name = "textBox7";
-            textBox7.Size = new Size(432, 34);
-            textBox7.TabIndex = 6;
+            label21.Text = "Status";
             // 
             // label22
             // 
             label22.AutoSize = true;
-            label22.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold);
+            label22.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             label22.ForeColor = SystemColors.ActiveCaptionText;
-            label22.Location = new Point(33, 125);
+            label22.Location = new Point(32, 84);
             label22.Name = "label22";
-            label22.Size = new Size(163, 28);
-            label22.TabIndex = 5;
-            label22.Text = "Customer ID";
+            label22.Size = new Size(100, 24);
+            label22.TabIndex = 15;
+            label22.Text = "Total Due";
+            // 
+            // textBox6
+            // 
+            textBox6.Font = new Font("Microsoft Sans Serif", 13.8F);
+            textBox6.Location = new Point(459, 80);
+            textBox6.Margin = new Padding(3, 2, 3, 2);
+            textBox6.Name = "textBox6";
+            textBox6.Size = new Size(316, 28);
+            textBox6.TabIndex = 16;
             // 
             // label23
             // 
             label23.AutoSize = true;
-            label23.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold);
+            label23.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
             label23.ForeColor = SystemColors.ActiveCaptionText;
-            label23.Location = new Point(33, 76);
+            label23.Location = new Point(32, 117);
             label23.Name = "label23";
-            label23.Size = new Size(203, 28);
-            label23.TabIndex = 4;
-            label23.Text = "Customer Name";
+            label23.Size = new Size(146, 24);
+            label23.TabIndex = 17;
+            label23.Text = "Extension Fee";
             // 
-            // label24
+            // textBox7
             // 
-            label24.AutoSize = true;
-            label24.Font = new Font("Bookman Old Style", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label24.ForeColor = SystemColors.ActiveCaptionText;
-            label24.Location = new Point(20, 11);
-            label24.Name = "label24";
-            label24.Size = new Size(239, 36);
-            label24.TabIndex = 3;
-            label24.Text = "Customer Info";
+            textBox7.Font = new Font("Microsoft Sans Serif", 13.8F);
+            textBox7.Location = new Point(459, 113);
+            textBox7.Margin = new Padding(3, 2, 3, 2);
+            textBox7.Name = "textBox7";
+            textBox7.Size = new Size(316, 28);
+            textBox7.TabIndex = 18;
             // 
             // label25
             // 
             label25.AutoSize = true;
-            label25.Font = new Font("Bookman Old Style", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label25.Location = new Point(89, 54);
+            label25.Font = new Font("Microsoft Sans Serif", 24F, FontStyle.Bold);
+            label25.Location = new Point(78, 40);
             label25.Name = "label25";
-            label25.Size = new Size(360, 47);
+            label25.Size = new Size(268, 37);
             label25.TabIndex = 18;
-            label25.Text = "Payment Details";
+            label25.Text = "Payment Update";
             // 
             // panel1
             // 
             panel1.BackColor = Color.DarkSeaGreen;
-            panel1.Location = new Point(-2, 97);
+            panel1.Location = new Point(-2, 73);
+            panel1.Margin = new Padding(3, 2, 3, 2);
             panel1.Name = "panel1";
-            panel1.Size = new Size(280, 935);
+            panel1.Size = new Size(245, 701);
             panel1.TabIndex = 1;
             // 
             // OrchardLogo
             // 
             OrchardLogo.BackColor = Color.Transparent;
             OrchardLogo.Image = Properties.Resources.OrchardLogoResized;
-            OrchardLogo.Location = new Point(89, 9);
+            OrchardLogo.Location = new Point(78, 7);
             OrchardLogo.Name = "OrchardLogo";
-            OrchardLogo.Size = new Size(82, 78);
+            OrchardLogo.Size = new Size(72, 58);
             OrchardLogo.TabIndex = 2;
             // 
             // tab1Btn
             // 
             tab1Btn.BackColor = Color.FromArgb(209, 254, 216);
-            tab1Btn.FlatAppearance.BorderColor = Color.FromArgb(0, 64, 0);
-            tab1Btn.FlatAppearance.BorderSize = 0;
             tab1Btn.FlatStyle = FlatStyle.Flat;
-            tab1Btn.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            tab1Btn.Location = new Point(275, 46);
+            tab1Btn.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
+            tab1Btn.Location = new Point(241, 34);
+            tab1Btn.Margin = new Padding(3, 2, 3, 2);
             tab1Btn.Name = "tab1Btn";
-            tab1Btn.Size = new Size(208, 50);
+            tab1Btn.Size = new Size(182, 38);
             tab1Btn.TabIndex = 3;
             tab1Btn.Text = "Reservations";
             tab1Btn.UseVisualStyleBackColor = false;
@@ -1056,12 +1043,12 @@
             // tab2Btn
             // 
             tab2Btn.BackColor = Color.FromArgb(209, 254, 216);
-            tab2Btn.FlatAppearance.BorderSize = 0;
             tab2Btn.FlatStyle = FlatStyle.Flat;
-            tab2Btn.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            tab2Btn.Location = new Point(489, 46);
+            tab2Btn.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
+            tab2Btn.Location = new Point(428, 34);
+            tab2Btn.Margin = new Padding(3, 2, 3, 2);
             tab2Btn.Name = "tab2Btn";
-            tab2Btn.Size = new Size(208, 50);
+            tab2Btn.Size = new Size(182, 38);
             tab2Btn.TabIndex = 4;
             tab2Btn.Text = "Customers";
             tab2Btn.UseVisualStyleBackColor = false;
@@ -1070,13 +1057,12 @@
             // button10
             // 
             button10.BackColor = Color.FromArgb(209, 254, 216);
-            button10.FlatAppearance.BorderColor = Color.FromArgb(0, 64, 0);
-            button10.FlatAppearance.BorderSize = 0;
             button10.FlatStyle = FlatStyle.Flat;
-            button10.Font = new Font("Bookman Old Style", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button10.Location = new Point(703, 46);
+            button10.Font = new Font("Microsoft Sans Serif", 13.8F, FontStyle.Bold);
+            button10.Location = new Point(615, 34);
+            button10.Margin = new Padding(3, 2, 3, 2);
             button10.Name = "button10";
-            button10.Size = new Size(208, 50);
+            button10.Size = new Size(182, 38);
             button10.TabIndex = 5;
             button10.Text = "Payments";
             button10.UseVisualStyleBackColor = false;
@@ -1084,10 +1070,10 @@
             // 
             // MainAdminForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(239, 255, 238);
-            ClientSize = new Size(1878, 1029);
+            ClientSize = new Size(1643, 772);
             Controls.Add(button10);
             Controls.Add(tab2Btn);
             Controls.Add(tab1Btn);
@@ -1095,6 +1081,7 @@
             Controls.Add(tabControl1);
             Controls.Add(panel1);
             FormBorderStyle = FormBorderStyle.Fixed3D;
+            Margin = new Padding(3, 2, 3, 2);
             Name = "MainAdminForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "The Orchard Farm and Resort Reservation Management System";
@@ -1127,8 +1114,6 @@
             panel5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
-            panel6.ResumeLayout(false);
-            panel6.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -1207,15 +1192,12 @@
         private Label label19;
         private Label label20;
         private Label label21;
-        private Panel panel6;
-        private Button button9;
+        private Label label25;
+        private PictureBox pictureBox1;
+        private Button button10;
         private TextBox textBox6;
         private TextBox textBox7;
         private Label label22;
         private Label label23;
-        private Label label24;
-        private Label label25;
-        private PictureBox pictureBox1;
-        private Button button10;
     }
 }

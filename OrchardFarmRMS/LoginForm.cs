@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics.Metrics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,96 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
+/*
+ * -- Customers
+CREATE TABLE Customers (
+    customerID    INT IDENTITY(1,1) PRIMARY KEY,
+    fullName      NVARCHAR(200) NOT NULL,
+    facebookLink  NVARCHAR(500) NULL,
+    CreatedAt     DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);
+
+-- Packages
+CREATE TABLE Packages (
+    PackageID     INT IDENTITY(1,1) PRIMARY KEY,
+    PackageName   NVARCHAR(200) NOT NULL,
+    PackagePrice  DECIMAL(18,2) NULL,
+    MaxGuests     INT NULL,
+    Active        BIT NOT NULL DEFAULT 1,
+    Details       NVARCHAR(MAX) NULL
+);
+
+-- Reservation
+CREATE TABLE Reservation (
+    ReservationID INT IDENTITY(1,1) PRIMARY KEY,
+    CustomerID    INT NOT NULL,
+    PackageName   NVARCHAR(200) NULL,        -- used by Select/Load/Update flows in code
+    PaymentStatus NVARCHAR(50) NULL,
+    NumGuests     INT NULL,
+    CheckInDate   DATE NULL,
+    CheckOutDate  DATE NULL,
+    SpecialNote   NVARCHAR(MAX) NULL,
+    BookingStatus NVARCHAR(50) NULL,
+    DateCreated   DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
+    DateModified  DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
+    CONSTRAINT FK_Reservation_Customers FOREIGN KEY (CustomerID) REFERENCES Customers(customerID)
+        ON DELETE CASCADE
+);
+
+CREATE INDEX IX_Reservation_CustomerID ON Reservation(CustomerID);
+CREATE INDEX IX_Reservation_DateCreated ON Reservation(DateCreated DESC);
+
+-- Payment
+CREATE TABLE Payment (
+    PaymentID     INT IDENTITY(1,1) PRIMARY KEY,
+    ReservationID INT NOT NULL,
+    PackagePrice  DECIMAL(18,2) NULL,
+    PaymentDate   DATETIME2 NULL,
+    TotalDue      DECIMAL(18,2) NULL,
+    ExtensionFee  DECIMAL(18,2) NULL,
+    AmountPaid    DECIMAL(18,2) NULL,
+    PaymentProof  VARBINARY(MAX) NULL,       -- code supports varbinary bytes or a file-path string
+    PaymentStatus NVARCHAR(50) NULL,
+    CONSTRAINT FK_Payment_Reservation FOREIGN KEY (ReservationID) REFERENCES Reservation(ReservationID)
+        ON DELETE CASCADE
+);
+
+CREATE INDEX IX_Payment_ReservationID ON Payment(ReservationID);
+CREATE INDEX IX_Payment_PaymentDate ON Payment(PaymentDate DESC);
+
+-- Optional: small view used by LoadReservations() (matches the SELECT in code)
+CREATE VIEW vw_ReservationsList AS
+SELECT 
+    R.ReservationID, 
+    C.fullName AS CustomerName,
+    R.PackageName, 
+    R.PaymentStatus, 
+    R.NumGuests, 
+    R.CheckInDate, 
+    R.CheckOutDate, 
+    R.BookingStatus,
+    R.SpecialNote,
+    R.DateCreated
+FROM Reservation R
+JOIN Customers C ON R.CustomerID = C.customerID;
+
+-- Optional: small view used by LoadPayments() (matches the SELECT in code)
+CREATE VIEW vw_PaymentList AS
+SELECT
+    PaymentID,
+    ReservationID,
+    PackagePrice,
+    PaymentDate,
+    TotalDue,
+    ExtensionFee,
+    AmountPaid,
+    PaymentProof,
+    PaymentStatus
+FROM Payment;
+ALTER TABLE Payment DROP CONSTRAINT FK_Payment_Reservation;
+ALTER TABLE Payment
+ADD CONSTRAINT FK_Payment_Reservation
+FOREIGN KEY (ReservationID) REFERENCES Reservation(ReservationID) ON DELETE CASCADE;*/
 namespace OrchardFarmRMS
 {
     public partial class LoginForm : Form
@@ -20,6 +111,7 @@ namespace OrchardFarmRMS
         public LoginForm()
         {
             InitializeComponent();
+            this.AcceptButton = LoginBtn;
             RoleCheck();
         }
 
