@@ -74,6 +74,8 @@ namespace OrchardFarmRMS
             if (label22 != null) label22.Text = "Total Due";
             if (label23 != null) label23.Text = "Extension Fee";
 
+            // Ensure CustomerClearBtn enabled by default at startup (defensive)
+            if (CustomerClearBtn != null) CustomerClearBtn.Enabled = true;
         }
 
         private void MainAdminForm_Shown(object? sender, EventArgs e)
@@ -202,6 +204,9 @@ namespace OrchardFarmRMS
         
         private void ResClearBtn_Click(object sender, EventArgs e)
         {
+            // remember whether we were in edit mode before clearing reservation inputs
+            var wasEditing = editingReservationId != null;
+
             if (packageBox != null) packageBox.SelectedIndex = -1;
 
             currentPackageMaxGuests = int.MaxValue;
@@ -212,24 +217,37 @@ namespace OrchardFarmRMS
             checkOutDateBox.Value = DateTime.Now;
             noteBox.Clear();
 
-            // Clear customer fields as well when opening Add Reservation
-            if (NameBox != null)
-            {
-                NameBox.Clear();
-                // ensure editable in Add mode
-                NameBox.ReadOnly = false;
-                NameBox.BackColor = SystemColors.Window;
-            }
-            if (ContactBox != null)
-            {
-                ContactBox.Clear();
-                // ensure editable in Add mode
-                ContactBox.ReadOnly = false;
-                ContactBox.BackColor = SystemColors.Window;
-            }
+            // if we were not editing, reset customer fields to editable and enable Clear button
+            if (!wasEditing)
+            {     
+                if (NameBox != null)
+                {
+                    NameBox.ReadOnly = false;
+                    NameBox.BackColor = SystemColors.Window;
+                }
+                if (ContactBox != null)
+                {
+                    ContactBox.ReadOnly = false;
+                    ContactBox.BackColor = SystemColors.Window;
+                }
 
-            editingReservationId = null;
-            confirmBtn.Text = "Add Reservation";
+                if (CustomerClearBtn != null)
+                {
+                    CustomerClearBtn.Enabled = true;
+                    CustomerClearBtn.BackColor = Color.FromArgb(158, 226, 167);
+                }
+
+                editingReservationId = null;
+                confirmBtn.Text = "Add Reservation";
+            }
+            else
+            {
+                if (CustomerClearBtn != null)
+                {
+                    CustomerClearBtn.Enabled = false;
+                    CustomerClearBtn.BackColor = SystemColors.ControlLight;
+                }
+            }
         }
 
         private void cancelBtn_Click_1(object sender, EventArgs e)
@@ -403,6 +421,11 @@ namespace OrchardFarmRMS
                             ContactBox.ReadOnly = false;
                             ContactBox.BackColor = SystemColors.Window;
                         }
+                        if (CustomerClearBtn != null)
+                        {
+                            CustomerClearBtn.Enabled = true;
+                            CustomerClearBtn.BackColor = Color.FromArgb(158, 226, 167);
+                        }
 
                         editingReservationId = null;
                         ResClearBtn_Click(null, EventArgs.Empty);
@@ -426,6 +449,23 @@ namespace OrchardFarmRMS
         private void cancelBtn_Click(object sender, EventArgs e)
         {
             editingReservationId = null;
+
+            if (NameBox != null)
+            {
+                NameBox.ReadOnly = false;
+                NameBox.BackColor = SystemColors.Window;
+            }
+            if (ContactBox != null)
+            {
+                ContactBox.ReadOnly = false;
+                ContactBox.BackColor = SystemColors.Window;
+            }
+            if (CustomerClearBtn != null)
+            {
+                CustomerClearBtn.Enabled = true;
+                CustomerClearBtn.BackColor = Color.FromArgb(158, 226, 167);
+            }
+
             tabControl1.SelectedIndex = 0;
             ButtonSettings();
             confirmBtn.Text = "Add Reservation";
@@ -506,6 +546,13 @@ namespace OrchardFarmRMS
                 {
                     ContactBox.ReadOnly = true;
                     ContactBox.BackColor = SystemColors.ControlLight;
+                }
+
+
+                if (CustomerClearBtn != null)
+                {
+                    CustomerClearBtn.Enabled = false;
+                    CustomerClearBtn.BackColor = SystemColors.ControlLight;
                 }
 
                 editingReservationId = id;
@@ -665,9 +712,6 @@ namespace OrchardFarmRMS
             UpdatePaymentBtn_Click(sender, e);
         }
 
-        /// <summary>
-        /// Load all three grids (reservations, customers, payments).
-        /// </summary>
         private void LoadAllGrids()
         {
             LoadReservations();
@@ -675,9 +719,6 @@ namespace OrchardFarmRMS
             LoadPayments();
         }
 
-        /// <summary>
-        /// Load reservations into the reservations grid and set column formatting/headers.
-        /// </summary>
         private void LoadReservations()
         {
             try
@@ -746,9 +787,7 @@ namespace OrchardFarmRMS
             }
         }
 
-        /// <summary>
-        /// Load customers into the customers grid and set column formatting.
-        /// </summary>
+        //loads customers into the customers grid and configures column headers and widths.
         private void LoadCustomers()
         {
             try
@@ -797,14 +836,11 @@ ORDER BY fullName;", conn);
             }
         }
 
-        /// <summary>
-        /// Load payments into the payments grid, hide raw proof column and prepare image thumbnails.
-        /// </summary>
+        // loads payments into the payments grid and configures column headers, formats, and widths.
         private void LoadPayments()
         {
             try
             {
-                // ** FIX: Remove dynamic image column before binding to avoid duplication on reload. **
                 const string imgColName = "ProofImg";
                 if (dataGridView3.Columns.Contains(imgColName))
                     dataGridView3.Columns.Remove(imgColName);
@@ -1671,6 +1707,7 @@ WHERE PaymentID = @id;", conn, tx);
                 MessageBox.Show("Failed to open login form: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
 
             this.Close();
         }
