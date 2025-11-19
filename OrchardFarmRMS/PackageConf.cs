@@ -19,7 +19,6 @@ namespace OrchardFarmRMS
             connString = ConfigurationManager.ConnectionStrings["OrchardFarmDB"]?.ConnectionString
                          ?? throw new InvalidOperationException("Connection string 'OrchardFarmDB' not found.");
 
-            // Safe event wiring (unsubscribe then subscribe)
             searchBox.TextChanged -= SearchBox_TextChanged;
             searchBox.TextChanged += SearchBox_TextChanged;
 
@@ -32,15 +31,12 @@ namespace OrchardFarmRMS
             EditPackageBtn.Click -= EditPackageBtn_Click;
             EditPackageBtn.Click += EditPackageBtn_Click;
 
-            // Row header double-click uses DataGridViewCellMouseEventArgs
             dataGridView1.RowHeaderMouseDoubleClick -= DataGridView1_RowHeaderMouseDoubleClick;
             dataGridView1.RowHeaderMouseDoubleClick += DataGridView1_RowHeaderMouseDoubleClick;
 
-            // CellDoubleClick uses DataGridViewCellEventArgs => use a matching handler
             dataGridView1.CellDoubleClick -= DataGridView1_CellDoubleClick;
             dataGridView1.CellDoubleClick += DataGridView1_CellDoubleClick;
 
-            // Confirm/Cancel for the Add/Edit designer tab (designer wires Click too, ensure no duplicates)
             btnConfirmAdd.Click -= BtnConfirmAdd_Click;
             btnConfirmAdd.Click += BtnConfirmAdd_Click;
 
@@ -53,7 +49,6 @@ namespace OrchardFarmRMS
 
         private void ButtonSettings()
         {
-            // Configure tab control appearance (designer has tabControl1)
             tabControl1.Appearance = TabAppearance.Normal;
             tabControl1.SizeMode = TabSizeMode.Fixed;
             tabControl1.ItemSize = new Size(0, 1);
@@ -72,7 +67,6 @@ namespace OrchardFarmRMS
 
             try
             {
-                // Open a fresh login form and close this main form
                 var login = new LoginForm();
                 login.Show();
             }
@@ -81,8 +75,6 @@ namespace OrchardFarmRMS
                 MessageBox.Show("Failed to open login form: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
-            // Close the current main window to complete logout
             this.Close();
         }
 
@@ -90,7 +82,6 @@ namespace OrchardFarmRMS
         {
             if (grid == null) return;
 
-            // Base behavior
             grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             grid.MultiSelect = false;
             grid.ReadOnly = true;
@@ -102,8 +93,8 @@ namespace OrchardFarmRMS
             grid.GridColor = Color.FromArgb(220, 220, 220);
             grid.RowTemplate.Height = 36;
 
-            // Header styling
             grid.EnableHeadersVisualStyles = false;
+
             grid.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(37, 105, 44); // match main
             grid.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
             grid.ColumnHeadersDefaultCellStyle.Font = new Font("Bookman Old Style", 14F, FontStyle.Bold);
@@ -111,20 +102,17 @@ namespace OrchardFarmRMS
             grid.ColumnHeadersHeight = 48;
             grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 
-            // Row / cell styling
             grid.DefaultCellStyle.Font = new Font("Bookman Old Style", 12F, FontStyle.Regular);
             grid.DefaultCellStyle.ForeColor = Color.FromArgb(33, 33, 33);
             grid.DefaultCellStyle.SelectionBackColor = Color.FromArgb(131, 223, 117);
             grid.DefaultCellStyle.SelectionForeColor = Color.Black;
+
             grid.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 249, 244); // subtle banding
 
-            // Column autosizing default
             grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
 
-        /// <summary>
-        /// Loads packages from the SQL table "Packages".
-        /// </summary>
+        // load packages from DB
         private void LoadPackages()
         {
             try
@@ -145,7 +133,6 @@ ORDER BY PackageName", conn);
                 dataGridView1.AutoGenerateColumns = true;
                 dataGridView1.AllowUserToAddRows = false;
 
-                // Nicen up headers
                 if (dataGridView1.Columns.Contains("PackageID"))
                     dataGridView1.Columns["PackageID"].HeaderText = "Package ID";
                 if (dataGridView1.Columns.Contains("PackageName"))
@@ -153,7 +140,7 @@ ORDER BY PackageName", conn);
                 if (dataGridView1.Columns.Contains("PackagePrice"))
                 {
                     dataGridView1.Columns["PackagePrice"].HeaderText = "Package Price";
-                    dataGridView1.Columns["PackagePrice"].DefaultCellStyle.Format = "C2";
+                    dataGridView1.Columns["PackagePrice"].DefaultCellStyle.Format = "'php' #,##0.00";
                 }
                 if (dataGridView1.Columns.Contains("MaxGuests"))
                     dataGridView1.Columns["MaxGuests"].HeaderText = "Max Guests";
@@ -165,7 +152,6 @@ ORDER BY PackageName", conn);
                     dataGridView1.Columns["Details"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 }
 
-                // apply styling after binding
                 ConfigureGrid(dataGridView1);
             }
             catch (Exception ex)
@@ -185,15 +171,10 @@ ORDER BY PackageName", conn);
             }
             else
             {
-                // Filter by PackageName or Details
                 packagesTable.DefaultView.RowFilter = $"PackageName LIKE '%{filter}%' OR Details LIKE '%{filter}%'";
             }
         }
 
-        /// <summary>
-        /// Show the designer-created Add Package tab in "Add" mode (clears inputs).
-        /// The same tab is reused for Edit mode.
-        /// </summary>
         private void AddPackageBtn_Click(object sender, EventArgs e)
         {
             EnterAddMode();
@@ -203,7 +184,6 @@ ORDER BY PackageName", conn);
 
         private void EnterAddMode()
         {
-            // Clear inputs and set mode (no id tag)
             addHeaderLabel.Text = "Add Package";
             btnConfirmAdd.Text = "Save Package";
             btnConfirmAdd.Tag = null;
@@ -215,9 +195,6 @@ ORDER BY PackageName", conn);
             txtDetailsAdd.Text = string.Empty;
         }
 
-        /// <summary>
-        /// Edit button: preload selected row into the same Add tab but in Edit mode.
-        /// </summary>
         private void EditPackageBtn_Click(object sender, EventArgs e)
         {
             if (dataGridView1.CurrentRow == null)
@@ -241,7 +218,6 @@ ORDER BY PackageName", conn);
 
             var id = Convert.ToInt32(idObj);
 
-            // preload fields
             txtNameAdd.Text = dataGridView1.CurrentRow.Cells["PackageName"].Value?.ToString() ?? string.Empty;
             txtPriceAdd.Text = dataGridView1.CurrentRow.Cells["PackagePrice"].Value != DBNull.Value
                 ? Convert.ToDecimal(dataGridView1.CurrentRow.Cells["PackagePrice"].Value).ToString("0.00")
@@ -254,10 +230,9 @@ ORDER BY PackageName", conn);
                 : true;
             txtDetailsAdd.Text = dataGridView1.CurrentRow.Cells["Details"].Value?.ToString() ?? string.Empty;
 
-            // switch UI to edit mode
             addHeaderLabel.Text = "Edit Package";
             btnConfirmAdd.Text = "Save Changes";
-            btnConfirmAdd.Tag = id; // use Tag to indicate edit and hold id
+            btnConfirmAdd.Tag = id; 
 
             tabControl1.SelectedTab = addPackageTab;
             ButtonSettings();
@@ -268,16 +243,11 @@ ORDER BY PackageName", conn);
             EditPackageBtn_Click(sender, EventArgs.Empty);
         }
 
-        // New: handler that matches CellDoubleClick's delegate
         private void DataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Forward to same edit logic (no mouse info required)
             EditPackageBtn_Click(sender, EventArgs.Empty);
         }
-
-        /// <summary>
-        /// Confirm handler: performs INSERT when in Add mode (Tag == null), or UPDATE when Tag contains PackageID.
-        /// </summary>
+        
         private void BtnConfirmAdd_Click(object sender, EventArgs e)
         {
             var name = txtNameAdd.Text.Trim();
@@ -295,10 +265,8 @@ ORDER BY PackageName", conn);
             var active = chkActiveAdd.Checked;
             var details = txtDetailsAdd.Text.Trim();
 
-            // Determine mode: Add vs Edit
             if (btnConfirmAdd.Tag == null)
             {
-                // Add
                 try
                 {
                     ExecuteNonQuery(@"
@@ -322,7 +290,6 @@ VALUES (@name, @price, @maxGuests, @active, @details);", cmd =>
             }
             else
             {
-                // Edit: update existing
                 var id = Convert.ToInt32(btnConfirmAdd.Tag);
                 try
                 {
@@ -354,8 +321,6 @@ WHERE PackageID = @id;", cmd =>
                     return;
                 }
             }
-
-            // refresh, reset tab to Add mode and return to list
             LoadPackages();
             EnterAddMode();
             tabControl1.SelectedIndex = 0;
@@ -364,7 +329,6 @@ WHERE PackageID = @id;", cmd =>
 
         private void BtnCancelAdd_Click(object sender, EventArgs e)
         {
-            // Cancel edit/add: reset and go back to list
             EnterAddMode();
             tabControl1.SelectedIndex = 0;
             ButtonSettings();
@@ -416,7 +380,7 @@ WHERE PackageID = @id;", cmd =>
             }
         }
 
-        // Helper: centralized ExecuteNonQuery to reduce repetition
+        // helper to execute non-query SQL commands
         private int ExecuteNonQuery(string sql, Action<SqlCommand> addParameters)
         {
             using var conn = new SqlConnection(connString);

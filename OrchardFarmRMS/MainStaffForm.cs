@@ -11,20 +11,17 @@ namespace OrchardFarmRMS
 {
     public partial class MainAdminForm : Form
     {
-        // track current package max guests (default large)
+        
         private int currentPackageMaxGuests = int.MaxValue;
 
-        // in-memory caches (DataTables) bound to grids
         private DataTable reservationsTable;
         private DataTable customersTable;
         private DataTable paymentsTable;
 
-        // editing state for tabs (null means Add mode)
         private int? editingReservationId;
         private int? editingCustomerId;
         private int? editingPaymentId;
 
-        // runtime-created buttons for customer tab (designer didn't include save/cancel)
         private Button saveCustomerBtn;
         private Button cancelCustomerBtn;
 
@@ -38,22 +35,16 @@ namespace OrchardFarmRMS
             InitializeComponent();
             ButtonSettings();
 
-
             connString = ConfigurationManager.ConnectionStrings["OrchardFarmDB"]?.ConnectionString
                          ?? throw new InvalidOperationException("Connection string 'OrchardFarmDB' not found.");
 
-            // wire events and configure visuals/behaviour
             WireUpEvents();
             ConfigureGrid(dataGridView1);
             ConfigureGrid(dataGridView2);
             ConfigureGrid(dataGridView3);
-
-
-
-            // DEFER loading until the form is shown (handle will be created then)
+            
             this.Shown += MainAdminForm_Shown;
-
-            // initialize payment status choices
+            // set up payment status combo box
             comboBox1.Items.Clear();
             comboBox1.Items.AddRange(new object[] { "Pending", "Paid", "Canceled" });
             comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -63,7 +54,7 @@ namespace OrchardFarmRMS
 
             if (pictureBox1 != null) pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
 
-            // wire a small set of runtime handlers that are not part of designer
+            // wire up payment proof browse button
             button6.Click += PaymentProofBrowse_Click;
             if (textBox6 != null)
             {
@@ -80,25 +71,18 @@ namespace OrchardFarmRMS
                 textBox8.Leave += CurrencyTextBox_Leave;
                 textBox8.KeyPress += CurrencyTextBox_KeyPress;
             }
-
-            // small text updates kept here so designer remains pure layout
             if (label22 != null) label22.Text = "Total Due";
             if (label23 != null) label23.Text = "Extension Fee";
+
         }
 
         private void MainAdminForm_Shown(object? sender, EventArgs e)
         {
-            // unsubscribe so this runs only once
             this.Shown -= MainAdminForm_Shown;
-
-            // safe to load grids now — handle exists
             LoadAllGrids();
         }
 
-        /// <summary>
-        /// Wire runtime events that attach UI actions to handlers.
-        /// Designer defines controls; this method only attaches behaviour.
-        /// </summary>
+        //winform did'nt work so wire up events manually
         private void WireUpEvents()
         {
             packageBox.SelectedIndexChanged += PackageBox_SelectedIndexChanged;
@@ -110,12 +94,9 @@ namespace OrchardFarmRMS
             dataGridView1.RowHeaderMouseDoubleClick += (s, e) => EditResBtn_Click(s, EventArgs.Empty);
             dataGridView1.CellDoubleClick += (s, e) => EditResBtn_Click(s, EventArgs.Empty);
 
-            // Keep row-header double-click opening the Edit dialog, but make a double-click
-            // on a customer row open the Customer History (same as ViewCustomerHistoryBtn_Click).
             dataGridView2.RowHeaderMouseDoubleClick += (s, e) => EditCustomerBtn_Click(s, EventArgs.Empty);
             dataGridView2.CellDoubleClick += (s, e) => ViewCustomerHistoryBtn_Click(s, EventArgs.Empty);
 
-            // Ensure payments grid double-click (row header or cell) goes to payment update tab
             dataGridView3.RowHeaderMouseDoubleClick += (s, e) => UpdatePaymentBtn_Click(s, EventArgs.Empty);
             dataGridView3.CellDoubleClick += (s, e) => UpdatePaymentBtn_Click(s, EventArgs.Empty);
 
@@ -123,10 +104,8 @@ namespace OrchardFarmRMS
             textBox1.TextChanged += CustomersSearchBox_TextChanged;
             textBox4.TextChanged += PaymentsSearchBox_TextChanged;
 
-            // buttons declared in designer - attach handlers here
             button2.Click += ViewCustomerHistoryBtn_Click;
 
-            // Wire the "Update Payment Record" button to the same update routine.
             if (button4 != null)
             {
                 button4.Click -= UpdatePaymentBtn_Click;
@@ -143,16 +122,7 @@ namespace OrchardFarmRMS
             }
         }
 
-        /// <summary>
-        /// Create the small runtime-only Save / Cancel buttons used on the customer details tab.
-        /// These are not designer-managed so they are created here.
-        /// </summary>
-        
-
-        /// <summary>
-        /// Apply consistent appearance and behaviour to a DataGridView.
-        /// Designer supplies control instance; method configures runtime behavior.
-        /// </summary>
+        // configure datagridview appearance and behavior
         private void ConfigureGrid(DataGridView grid)
         {
             if (grid == null) return;
@@ -185,9 +155,7 @@ namespace OrchardFarmRMS
             grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
 
-        /// <summary>
-        /// Update tab button colours to reflect current selected tab.
-        /// </summary>
+        // configure tab buttons appearance based on selected tab
         private void ButtonSettings()
         {
             tabControl1.Appearance = TabAppearance.Normal;
@@ -201,7 +169,7 @@ namespace OrchardFarmRMS
             tab2Btn.BackColor = tabControl1.SelectedIndex == 1 ? selectedColor : normalColor;
             button10.BackColor = tabControl1.SelectedIndex == 4 ? selectedColor : normalColor;
         }
-
+     
         private void ResTab_Click(object sender, EventArgs e)
         {
             tabControl1.SelectedIndex = 0;
@@ -214,11 +182,7 @@ namespace OrchardFarmRMS
             ButtonSettings();
         }
 
-        private void MainAdminForm_Load(object sender, EventArgs e) { }
-
-        /// <summary>
-        /// Open the Add Reservation tab in Add mode.
-        /// </summary>
+        // prepares the reservation tab for adding a new reservation.
         private void AddResBtn_Click(object sender, EventArgs e)
         {
             try { LoadPackagesIntoCombo(); } catch { /* non-fatal */ }
@@ -229,13 +193,13 @@ namespace OrchardFarmRMS
             tabControl1.SelectedIndex = 2;
             ButtonSettings();
         }
-
+        
         private void CustomerClearBtn_Click(object sender, EventArgs e)
         {
             NameBox.Clear();
             ContactBox.Clear();
         }
-
+        
         private void ResClearBtn_Click(object sender, EventArgs e)
         {
             if (packageBox != null) packageBox.SelectedIndex = -1;
@@ -249,40 +213,45 @@ namespace OrchardFarmRMS
             noteBox.Clear();
 
             // Clear customer fields as well when opening Add Reservation
-            if (NameBox != null) NameBox.Clear();
-            if (ContactBox != null) ContactBox.Clear();
+            if (NameBox != null)
+            {
+                NameBox.Clear();
+                // ensure editable in Add mode
+                NameBox.ReadOnly = false;
+                NameBox.BackColor = SystemColors.Window;
+            }
+            if (ContactBox != null)
+            {
+                ContactBox.Clear();
+                // ensure editable in Add mode
+                ContactBox.ReadOnly = false;
+                ContactBox.BackColor = SystemColors.Window;
+            }
 
             editingReservationId = null;
             confirmBtn.Text = "Add Reservation";
         }
 
-        private void cancelBtn_Click_1(object sender, EventArgs e) {
-            // Cancel payment edit: clear editing state and return to Payments tab
+        private void cancelBtn_Click_1(object sender, EventArgs e)
+        {
             editingPaymentId = null;
 
-            // Clear any selected proof caches and preview
             selectedPaymentProofPath = null;
             selectedPaymentProofBytes = null;
             if (pictureBox1 != null) pictureBox1.Image = null;
 
-            // Clear payment fields on the details panel so stale values are not left visible
             if (textBox6 != null) textBox6.Text = string.Empty;
             if (textBox7 != null) textBox7.Text = string.Empty;
             if (textBox8 != null) textBox8.Text = string.Empty;
             if (comboBox1 != null && comboBox1.Items.Count > 0) comboBox1.SelectedIndex = 0;
 
-            // Restore any button text that the update flow changed
             if (DelCustomerBtn != null) DelCustomerBtn.Text = "Confirm Reservation";
 
-            // Navigate back to the Payments tab and refresh button styles
             tabControl1.SelectedIndex = 3;
             ButtonSettings();
         }
 
-        /// <summary>
-        /// Handles both Add and Update for reservations depending on editingReservationId.
-        /// Validates input, uses transactions for multi-table updates and reloads relevant grids.
-        /// </summary>
+
         private void confirmBtn_Click_1(object sender, EventArgs e)
         {
             var customerName = NameBox.Text.Trim();
@@ -293,6 +262,13 @@ namespace OrchardFarmRMS
             var checkOut = checkOutDateBox.Value.Date;
             var notes = noteBox.Text.Trim();
 
+            if (checkOut < checkIn)
+            {
+                ShowWarning("Check-Out date cannot be earlier than Check-In date.");
+                if (checkOutDateBox != null) checkOutDateBox.Focus();
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(customerName))
             {
                 ShowWarning("Customer name is required.");
@@ -300,7 +276,6 @@ namespace OrchardFarmRMS
                 return;
             }
 
-            // Require a package to be selected for new reservations
             if (editingReservationId == null)
             {
                 if (string.IsNullOrWhiteSpace(packageSelected) || packageBox?.SelectedIndex == -1)
@@ -313,7 +288,6 @@ namespace OrchardFarmRMS
 
             if (editingReservationId == null)
             {
-                // Add flow
                 try
                 {
                     using var conn = CreateConnection();
@@ -363,7 +337,6 @@ namespace OrchardFarmRMS
             }
             else
             {
-                // Update flow
                 try
                 {
                     using var conn = CreateConnection();
@@ -419,6 +392,18 @@ namespace OrchardFarmRMS
                         LoadReservations();
                         LoadPayments();
                         LoadCustomers();
+
+                        if (NameBox != null)
+                        {
+                            NameBox.ReadOnly = false;
+                            NameBox.BackColor = SystemColors.Window;
+                        }
+                        if (ContactBox != null)
+                        {
+                            ContactBox.ReadOnly = false;
+                            ContactBox.BackColor = SystemColors.Window;
+                        }
+
                         editingReservationId = null;
                         ResClearBtn_Click(null, EventArgs.Empty);
                         tabControl1.SelectedIndex = 0;
@@ -446,9 +431,6 @@ namespace OrchardFarmRMS
             confirmBtn.Text = "Add Reservation";
         }
 
-        /// <summary>
-        /// Load reservation into the reservation edit tab so the user can update it.
-        /// </summary>
         private void EditResBtn_Click(object sender, EventArgs e)
         {
             if (dataGridView1.CurrentRow == null)
@@ -515,6 +497,17 @@ namespace OrchardFarmRMS
                     return;
                 }
 
+                if (NameBox != null)
+                {
+                    NameBox.ReadOnly = true;
+                    NameBox.BackColor = SystemColors.ControlLight;
+                }
+                if (ContactBox != null)
+                {
+                    ContactBox.ReadOnly = true;
+                    ContactBox.BackColor = SystemColors.ControlLight;
+                }
+
                 editingReservationId = id;
                 confirmBtn.Text = "Update Reservation";
                 tabControl1.SelectedIndex = 2;
@@ -526,10 +519,6 @@ namespace OrchardFarmRMS
             }
         }
 
-        /// <summary>
-        /// Prepare customer details tab for editing the selected customer.
-        /// Populates fields and changes runtime Save/Cancel button appearance.
-        /// </summary>
         private void EditCustomerBtn_Click(object sender, EventArgs e)
         {
             if (dataGridView2.CurrentRow == null)
@@ -568,10 +557,7 @@ namespace OrchardFarmRMS
             }
         }
 
-        /// <summary>
-        /// Add or update a customer depending on editingCustomerId.
-        /// Updates the customers grid and resets runtime state.
-        /// </summary>
+        // saves the customer data from the customer tab (add or edit).
         private void SaveCustomerFromTab(object sender, EventArgs e)
         {
             var name = NameBox?.Text.Trim() ?? string.Empty;
@@ -899,7 +885,7 @@ ORDER BY fullName;", conn);
                 {
                     dataGridView3.Columns["PaymentProof"].Width = 110;
                     var proofCol = dataGridView3.Columns["PaymentProof"];
-                    
+
                 }
 
 
@@ -910,7 +896,7 @@ ORDER BY fullName;", conn);
             }
         }
 
-        // Search/filter handlers (client-side filter via DataView)
+        // It applies filtering to the reservations, customers, or payments grid based on the respective search box input.
         private void ReservationsSearchBox_TextChanged(object sender, EventArgs e)
         {
             if (reservationsTable == null) return;
@@ -939,9 +925,6 @@ ORDER BY fullName;", conn);
                 : $"Convert(ReservationID, 'System.String') LIKE '%{filter}%'";
         }
 
-        /// <summary>
-        /// Delete the selected reservation (with confirmation).
-        /// </summary>
         private void DelResBtn_Click(object sender, EventArgs e)
         {
             if (dataGridView1.CurrentRow == null)
@@ -971,7 +954,6 @@ ORDER BY fullName;", conn);
                 using var tx = conn.BeginTransaction();
                 try
                 {
-                    // Remove any payment rows for this reservation first, then delete the reservation.
                     using (var delPay = new SqlCommand("DELETE FROM Payment WHERE ReservationID = @id", conn, tx))
                     {
                         delPay.Parameters.AddWithValue("@id", id);
@@ -1008,9 +990,7 @@ ORDER BY fullName;", conn);
             }
         }
 
-        /// <summary>
-        /// Delete the selected payment (with confirmation).
-        /// </summary>
+        
         private void DelPaymentBtn_Click(object sender, EventArgs e)
         {
             if (dataGridView3.CurrentRow == null)
@@ -1043,7 +1023,7 @@ ORDER BY fullName;", conn);
             var confirm = MessageBox.Show($"Delete payment record (ID {paymentId})?", "Confirm delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (confirm != DialogResult.Yes) return;
 
-            // If there is an associated reservation, ask whether to delete it as well
+            // if there is an associated reservation, ask whether to delete it as well
             var deleteReservation = false;
             if (reservationId.HasValue)
             {
@@ -1081,7 +1061,7 @@ ORDER BY fullName;", conn);
                         var resRows = delRes.ExecuteNonQuery();
                         if (resRows == 0)
                         {
-                            // Reservation not found — still commit payment deletion but inform the user
+                            // reservation not found but still commits payment deletion but inform the user
                             tx.Commit();
                             ShowWarning("Payment deleted but associated reservation was not found.");
                             LoadPayments();
@@ -1096,7 +1076,7 @@ ORDER BY fullName;", conn);
                         return;
                     }
 
-                    // If we reach here, only payment deletion was requested and succeeded
+                    
                     tx.Commit();
                     ShowInfo("Payment deleted.");
                     LoadPayments();
@@ -1113,9 +1093,6 @@ ORDER BY fullName;", conn);
             }
         }
 
-        /// <summary>
-        /// Open payment edit tab and populate fields for the selected payment.
-        /// </summary>
         private void UpdatePaymentBtn_Click(object sender, EventArgs e)
         {
             if (dataGridView3.CurrentRow == null)
@@ -1195,10 +1172,7 @@ WHERE PaymentID = @id;", conn);
             }
         }
 
-        /// <summary>
-        /// Save payment changes made in the payment tab.
-        /// Uses a transaction and writes binary PaymentProof if provided.
-        /// </summary>
+        // it saves the payment data from the payment update tab.
         private void SavePaymentFromTab(object sender, EventArgs e)
         {
             if (editingPaymentId == null)
@@ -1220,7 +1194,6 @@ WHERE PaymentID = @id;", conn);
                 var choice = MessageBox.Show(message, "Confirm overpayment", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
                 if (choice != DialogResult.Yes)
                 {
-                    // user chose "Go Back" (No) — abort save so they can correct values
                     return;
                 }
             }
@@ -1242,7 +1215,6 @@ SET AmountPaid = @amount,
     PaymentProof = @proof
 WHERE PaymentID = @id;", conn, tx);
 
-                    // Always add the @amount parameter
                     var pAmount = cmd.Parameters.Add("@amount", System.Data.SqlDbType.Decimal);
                     pAmount.Precision = 18;
                     pAmount.Scale = 2;
@@ -1310,9 +1282,7 @@ WHERE PaymentID = @id;", conn, tx);
             }
         }
 
-        /// <summary>
-        /// Loads active packages from the database and binds them to the packageBox combobox.
-        /// </summary>
+        // it loads active packages into the packageBox ComboBox.
         private void LoadPackagesIntoCombo()
         {
             if (packageBox == null) return;
@@ -1348,9 +1318,7 @@ WHERE PaymentID = @id;", conn, tx);
             }
         }
 
-        /// <summary>
-        /// When package selection changes, update guestBox.Maximum using the MaxGuests value.
-        /// </summary>
+        // it updates the guestBox maximum based on the selected package's MaxGuests value.
         private void PackageBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -1384,9 +1352,7 @@ WHERE PaymentID = @id;", conn, tx);
             }
         }
 
-        /// <summary>
-        /// Browse and load a payment proof image into memory and the preview PictureBox.
-        /// </summary>
+        // it allows browsing and selecting an image file as payment proof.
         private void PaymentProofBrowse_Click(object sender, EventArgs e)
         {
             using var ofd = new OpenFileDialog()
@@ -1416,10 +1382,7 @@ WHERE PaymentID = @id;", conn, tx);
             }
         }
 
-        /// <summary>
-        /// Helper which tries to load an image whether stored as binary or as a file path.
-        /// Returns a cloned image in the target PictureBox and caches bytes/path.
-        /// </summary>
+        // it loads an image from either a byte array or a file path stored in the database.
         private void LoadImageFromObject(object proofObj, ref string pathCache, ref byte[] bytesCache, PictureBox target)
         {
             try
@@ -1456,7 +1419,7 @@ WHERE PaymentID = @id;", conn, tx);
                 if (target != null) target.Image = null;
             }
         }
-
+        //it formats the currency text box on leave event.
         private void CurrencyTextBox_Leave(object sender, EventArgs e)
         {
             if (sender is TextBox tb)
@@ -1466,7 +1429,7 @@ WHERE PaymentID = @id;", conn, tx);
             }
         }
 
-        // Allow only numeric characters, decimal and thousand separators, control keys
+        // it restricts input to digits, decimal separator, and group separator.
         private void CurrencyTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (char.IsControl(e.KeyChar)) return;
@@ -1478,14 +1441,11 @@ WHERE PaymentID = @id;", conn, tx);
                 e.KeyChar.ToString() == decimalSep ||
                 e.KeyChar.ToString() == groupSep)
             {
-                // ok
                 return;
             }
-
-            // otherwise block
             e.Handled = true;
         }
-
+        // it formats a decimal value into a currency string with "php" prefix.
         private string FormatCurrencyString(decimal value)
         {
             // Use "php" prefix with current-culture formatting for separators
@@ -1494,37 +1454,33 @@ WHERE PaymentID = @id;", conn, tx);
             return $"php {value.ToString("N2", CultureInfo.CurrentCulture)}";
         }
 
+        // it parses a currency string (with or without "php" prefix) into a decimal value.
         private decimal ParseCurrencyString(string text)
         {
             if (string.IsNullOrWhiteSpace(text)) return 0m;
 
-            // remove "php" if present
+            
             var cleaned = text.Replace("php", "", StringComparison.OrdinalIgnoreCase).Trim();
 
-            // try parse with current culture (allows group separators)
             if (decimal.TryParse(cleaned, NumberStyles.Number | NumberStyles.AllowCurrencySymbol, CultureInfo.CurrentCulture, out var v))
                 return v;
 
-            // fallback: keep digits, decimal point and minus
             var fallback = "";
             foreach (var ch in cleaned)
                 if (char.IsDigit(ch) || ch == '.' || ch == '-' || ch == ',') fallback += ch;
 
-            // replace any group commas with current decimal separator handling if needed
             if (decimal.TryParse(fallback, NumberStyles.Number, CultureInfo.InvariantCulture, out v))
                 return v;
 
-            // final attempt using current culture
             if (decimal.TryParse(fallback, NumberStyles.Number, CultureInfo.CurrentCulture, out v))
                 return v;
 
             return 0m;
         }
 
-        // --- Helper methods for DB and UI messaging ---
-
+        // sets up and returns a new SQL connection using the stored connection string.
         private SqlConnection CreateConnection() => new SqlConnection(connString);
-
+        // it fills a DataTable using the provided SqlCommand.
         private DataTable FillTable(SqlCommand cmd)
         {
             using var adapter = new SqlDataAdapter(cmd);
@@ -1532,10 +1488,9 @@ WHERE PaymentID = @id;", conn, tx);
             adapter.Fill(dt);
             return dt;
         }
-
+        //finds an existing customer by full name or Facebook link, or creates a new customer if not found.
         private int FindOrCreateCustomer(SqlConnection conn, SqlTransaction tx, string fullName, string facebookLink)
         {
-            // First try to find by fullName (always)
             using (var checkByName = new SqlCommand("SELECT customerID FROM Customers WHERE fullName = @name", conn, tx))
             {
                 checkByName.Parameters.AddWithValue("@name", fullName);
@@ -1546,7 +1501,7 @@ WHERE PaymentID = @id;", conn, tx);
                 }
             }
 
-            // If a non-empty facebookLink was supplied, try to find by it
+            // if a nonempty facebookLink was supplied, try to find by it
             if (!string.IsNullOrWhiteSpace(facebookLink))
             {
                 using (var checkByLink = new SqlCommand("SELECT customerID FROM Customers WHERE facebookLink = @link", conn, tx))
@@ -1609,9 +1564,7 @@ WHERE PaymentID = @id;", conn, tx);
             MessageBox.Show(message, "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        /// <summary>
-        /// Display a simple modal grid with the selected customer's reservation/payment history.
-        /// </summary>
+        // displays the selected customer's reservation and payment history in a new dialog.
         private void ViewCustomerHistoryBtn_Click(object sender, EventArgs e)
         {
             if (dataGridView2.CurrentRow == null)
@@ -1684,7 +1637,6 @@ WHERE PaymentID = @id;", conn, tx);
             }
         }
 
-        // Small UI helpers to reduce duplication in Save/Cancel flows
         private void SetCustomerButtonsMode(bool isEdit)
         {
             if (saveCustomerBtn != null)
@@ -1720,7 +1672,6 @@ WHERE PaymentID = @id;", conn, tx);
                 return;
             }
 
-            // Close the current main window to complete logout
             this.Close();
         }
 
@@ -1770,5 +1721,6 @@ WHERE PaymentID = @id;", conn, tx);
                 ShowError("Error deleting customer: " + ex.Message);
             }
         }
+
     }
 }

@@ -1019,7 +1019,6 @@
             Name = "MainAdminForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "The Orchard Farm and Resort Reservation Management System";
-            Load += MainAdminForm_Load;
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             tabPage1.PerformLayout();

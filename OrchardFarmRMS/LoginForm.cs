@@ -113,7 +113,7 @@ namespace OrchardFarmRMS
 
         private void UpdateBtnColor()
         {
-            // Custom color change for when button is selected
+            // custom color change for when button is selected
             var selectedColor = Color.FromArgb(24, 112, 87);
             var normalColor = Color.SeaGreen;
 
