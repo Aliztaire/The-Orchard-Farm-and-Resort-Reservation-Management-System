@@ -21,6 +21,7 @@ namespace OrchardFarmRMS
         {
             InitializeComponent();
             RoleCheck();
+            this.AcceptButton = LoginBtn;
         }
 
         private void LoginForm_Load(object sender, EventArgs e)
